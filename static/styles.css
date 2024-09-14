@@ -1,0 +1,77 @@
+/* '*' = margin and padding for ALL elements' */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+  
+  /* font, background colour, text colour, font for whole page */
+  body {
+    font-family: Arial, sans-serif;
+    line-height: 1.6;
+    background-color: #f4f4f4;
+    color: #333;
+    padding: 20px;
+  }
+  
+  /* h1 style */
+  h1 {
+    color: #333; /*font colour*/
+    text-align: center; /* center text alignment */
+    margin-bottom: 20px;
+  }
+  
+  /* text input box exterior */
+  form {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 20px;
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  }
+  
+  /* text input box interior */
+  textarea {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 16px;
+    margin-bottom: 10px;
+    resize: vertical;
+  }
+  
+  /* 'check button' */
+  input[type="submit"] {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+  }
+  
+  input[type="submit"]:hover { /*hovering over button colour*/
+    background-color: #0056b3;
+  }
+  
+  /* result box */
+  div {
+    max-width: 600px;
+    margin: 20px auto;
+  }
+  
+  /* h1 style */
+  h2 {
+    color: #333;
+  }
+  
+  /* p style */
+  p {
+    background: #fff;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+  }

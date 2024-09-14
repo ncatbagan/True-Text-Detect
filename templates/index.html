@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Text Detector</title>
+    <link rel="stylesheet" href="/static/styles.css">
+</head>
+<body>
+    <h1>AI Text Detector</h1>
+    <form action="/check" method="post">
+        <textarea name="text" rows="4" cols="50" placeholder="Enter the text to check...">{{ text }}</textarea><br>
+        <input type="submit" value="Check">
+    </form>
+    <div>
+        {% if result %}
+            <h2>Result:</h2>
+            <p>{{ result }}</p>
+        {% endif %}
+    </div>
+</body>
+</html>
