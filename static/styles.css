@@ -1,77 +1,84 @@
-/* '*' = margin and padding for ALL elements' */
+/* applies to all aspects */
 * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-  }
-  
-  /* font, background colour, text colour, font for whole page */
-  body {
-    font-family: Arial, sans-serif;
-    line-height: 1.6;
-    background-color: #f4f4f4;
-    color: #333;
-    padding: 20px;
-  }
-  
-  /* h1 style */
-  h1 {
-    color: #333; /*font colour*/
-    text-align: center; /* center text alignment */
-    margin-bottom: 20px;
-  }
-  
-  /* text input box exterior */
-  form {
-    max-width: 600px;
-    margin: 0 auto;
-    padding: 20px;
-    background: #fff;
-    border-radius: 8px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-  }
-  
-  /* text input box interior */
-  textarea {
-    width: 100%;
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    font-size: 16px;
-    margin-bottom: 10px;
-    resize: vertical;
-  }
-  
-  /* 'check button' */
-  input[type="submit"] {
-    background-color: #007bff;
-    color: white;
-    border: none;
-    padding: 10px 20px;
-    border-radius: 4px;
-    cursor: pointer;
-    font-size: 16px;
-  }
-  
-  input[type="submit"]:hover { /*hovering over button colour*/
-    background-color: #0056b3;
-  }
-  
-  /* result box */
-  div {
-    max-width: 600px;
-    margin: 20px auto;
-  }
-  
-  /* h1 style */
-  h2 {
-    color: #333;
-  }
-  
-  /* p style */
-  p {
-    background: #fff;
-    padding: 10px;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-  }
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* body styling */
+body {
+  font-family: Arial, sans-serif;
+  line-height: 1.6;
+  background-color: #121212; /* Dark background */
+  color: #e0e0e0; /* Light text color */
+  padding: 20px;
+}
+
+/* container styling */
+.container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+  background: #1e1e1e; /* Slightly lighter background for container */
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5); /* Darker shadow for better contrast */
+}
+
+/* header styling */
+h1 {
+  text-align: center;
+  color: #e0e0e0; /* Light text color */
+  margin-bottom: 20px;
+}
+
+/* form styling */
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+textarea {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #333; /* dark border for textarea */
+  border-radius: 4px;
+  background-color: #333; /* dark background for textarea */
+  color: #e0e0e0; /* light text color */
+  resize: vertical;
+}
+
+input[type="submit"] {
+  background-color: #5cb85c; /* green button */
+  color: #fff; /* white text */
+  border: none;
+  padding: 10px 15px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+input[type="submit"]:hover {
+  background-color: #4cae4c; /* darker green on hover */
+}
+
+/* result section styling */
+.results {
+  display: flex; /* use flexbox to align items side by side */
+  gap: 20px; /* add space between the two result boxes */
+  margin-top: 20px;
+}
+
+.result-box {
+  flex: 1; /* allow both result boxes to grow equally */
+  background: #333; /* dark background for results */
+  border: 1px solid #444; /* slightly lighter border */
+  padding: 10px;
+  border-radius: 4px;
+  color: #e0e0e0; /* light text color */
+}
+
+h2 {
+  color: #e0e0e0; /* light text color */
+  margin-bottom: 10px;
+}

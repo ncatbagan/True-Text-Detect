@@ -7,16 +7,26 @@
     <link rel="stylesheet" href="/static/styles.css">
 </head>
 <body>
-    <h1>AI Text Detector</h1>
-    <form action="/check" method="post">
-        <textarea name="text" rows="4" cols="50" placeholder="Enter the text to check...">{{ text }}</textarea><br>
-        <input type="submit" value="Check">
-    </form>
-    <div>
-        {% if result %}
-            <h2>Result:</h2>
-            <p>{{ result }}</p>
-        {% endif %}
+    <div class="container">
+        <h1>AI Text Detector</h1>
+        <form action="/check" method="post">
+            <textarea name="text" rows="4" cols="50" placeholder="Enter the text to check...">{{ text }}</textarea><br>
+            <input type="submit" value="Check">
+        </form>
+        <div class="results">
+            {% if openai_result %}
+                <div class="result-box">
+                    <h2>OpenAI Result:</h2>
+                    <p>{{ openai_result }}</p>
+                </div>
+            {% endif %}
+            {% if gemini_result %}
+                <div class="result-box">
+                    <h2>Gemini AI Result:</h2>
+                    <p>{{ gemini_result }}</p>
+                </div>
+            {% endif %}
+        </div>
     </div>
 </body>
 </html>
