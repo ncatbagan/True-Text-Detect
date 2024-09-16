@@ -1,6 +1,10 @@
+import logging
 from flask import Flask, request, render_template
 from openai import OpenAI
 import google.generativeai as genai
+
+# Initialize logging
+logging.basicConfig(filename='app.log', level=logging.ERROR)
 
 # flask backend
 app = Flask(__name__)
@@ -39,6 +43,7 @@ def check():
         openai_result = completion.choices[0].message.content
     except Exception as e: # error handling
         openai_result = f"Error: {str(e)}"
+        logging.error(f"OpenAI Error: {str(e)}")  # Log error to app.log
 
     # gemini ai response
     try:
@@ -46,6 +51,7 @@ def check():
         gemini_result = gemini_response.text
     except Exception as e: # error handling
         gemini_result = f"Error: {str(e)}"
+        logging.error(f"Gemini AI Error: {str(e)}")  # Log error to app.log
 
     return render_template('index.html', openai_result=openai_result, gemini_result=gemini_result, text=user_input)
 
