@@ -3,7 +3,7 @@ from flask import Flask, request, render_template
 from openai import OpenAI
 import google.generativeai as genai
 
-# Initialize logging
+# initialize logging
 logging.basicConfig(filename='app.log', level=logging.ERROR)
 
 # flask backend
