@@ -11,17 +11,20 @@ body {
   line-height: 1.6;
   background-color: #121212; /* Dark background */
   color: #e0e0e0; /* Light text color */
-  padding: 20px;
+  height: 100vh; /* Full height of the viewport */
+  display: flex; /* Use flexbox to center content */
+  flex-direction: column; /* Stack elements vertically */
+  justify-content: center; /* Center content vertically */
+  align-items: center; /* Center content horizontally */
 }
 
 /* container styling */
 .container {
-  max-width: 800px;
-  margin: 0 auto;
+  width: 100%; /* Full width */
   padding: 20px;
   background: #1e1e1e; /* Slightly lighter background for container */
   border-radius: 8px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5); /* Darker shadow for better contrast */
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.7); /* Darker shadow for better contrast */
 }
 
 /* header styling */
@@ -56,6 +59,7 @@ input[type="submit"] {
   border-radius: 4px;
   cursor: pointer;
   font-size: 16px;
+  transition: background-color 0.3s; /* smooth transition */
 }
 
 input[type="submit"]:hover {
@@ -64,18 +68,24 @@ input[type="submit"]:hover {
 
 /* result section styling */
 .results {
-  display: flex; /* use flexbox to align items side by side */
-  gap: 20px; /* add space between the two result boxes */
+  display: flex;
+  flex-direction: column; /* stack results vertically */
+  gap: 20px; /* space between result boxes */
   margin-top: 20px;
+  width: 100%; /* Full width for results */
 }
 
 .result-box {
-  flex: 1; /* allow both result boxes to grow equally */
   background: #333; /* dark background for results */
   border: 1px solid #444; /* slightly lighter border */
   padding: 10px;
   border-radius: 4px;
   color: #e0e0e0; /* light text color */
+  transition: transform 0.2s; /* smooth scaling on hover */
+}
+
+.result-box:hover {
+  transform: scale(1.02); /* scale effect on hover */
 }
 
 h2 {
