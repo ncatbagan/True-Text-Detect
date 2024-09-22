@@ -20,7 +20,7 @@ gemini_model = genai.GenerativeModel("gemini-1.5-flash")
 
 # initialize BERT
 tokenizer = BertTokenizer.from_pretrained('bert-base-uncased')
-bert_model = BertForSequenceClassification.from_pretrained('bert-base-uncased', num_labels=2)
+bert_model = BertForSequenceClassification.from_pretrained('./fine_tuned_bert/')
 
 # home route - handles GET requests and renders HTML template
 @app.route('/')
