@@ -23,7 +23,7 @@ gemini_model = genai.GenerativeModel("gemini-1.5-flash")
 tokenizer = BertTokenizer.from_pretrained("pace-group-51/fine-tuned-bert")
 bert_model = BertForSequenceClassification.from_pretrained("pace-group-51/fine-tuned-bert")
 HF_API_URL = "https://api-inference.huggingface.co/models/pace-group-51/fine-tuned-bert"
-HF_HEADERS = {"Authorization": "Bearer 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"}  # API key after "Bearer "
+HF_HEADERS = {"Authorization": "Bearer <Hugging Face API Key>"}
 
 # home route - handles GET requests and renders HTML template
 @app.route('/')
