@@ -10,7 +10,7 @@ texts = [item['text'] for item in data]
 labels = torch.tensor([item['label'] for item in data])
 
 # load and tokenise texts & labels
-tokenizer = BertTokenizer.from_pretrained('bert-base-uncased')
+tokenizer = BertTokenizer.from_pretrained('pace-group-51/fine-tuned-bert')
 inputs = tokenizer(texts, padding=True, truncation=True, return_tensors="pt")
 
 # create DataLoader
@@ -18,7 +18,7 @@ dataset = TensorDataset(inputs['input_ids'], inputs['attention_mask'], labels)
 loader = DataLoader(dataset, batch_size=16)
 
 # initialise BERT
-bert_model = BertForSequenceClassification.from_pretrained('bert-base-uncased', num_labels=2)
+bert_model = BertForSequenceClassification.from_pretrained('pace-group-51/fine-tuned-bert', num_labels=2)
 
 # fine-tune BERT on dataset
 optimizer = AdamW(bert_model.parameters(), lr=5e-5)
@@ -32,5 +32,6 @@ for epoch in range(3):  # train for 3 cycles (epochs)
         optimizer.step()
         optimizer.zero_grad()
 
-# save fine-tuned model
-bert_model.save_pretrained('./fine_tuned_bert/')
+# push model & tokenizer to Hugging Face Model Hub
+bert_model.push_to_hub("pace-group-51/fine-tuned-bert")
+tokenizer.push_to_hub("pace-group-51/fine-tuned-bert")

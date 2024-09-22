@@ -4,6 +4,7 @@ from openai import OpenAI
 import google.generativeai as genai
 from transformers import BertTokenizer, BertForSequenceClassification
 import torch
+import requests
 
 # initialize logging
 logging.basicConfig(filename='app.log', level=logging.ERROR)
@@ -18,9 +19,11 @@ client = OpenAI(api_key="<OpenAI API Key>")
 genai.configure(api_key="<Gemini API Key>")
 gemini_model = genai.GenerativeModel("gemini-1.5-flash")
 
-# initialize BERT
-tokenizer = BertTokenizer.from_pretrained('bert-base-uncased')
-bert_model = BertForSequenceClassification.from_pretrained('./fine_tuned_bert/')
+# initialise BERT & configure Hugging Face API
+tokenizer = BertTokenizer.from_pretrained("pace-group-51/fine-tuned-bert")
+bert_model = BertForSequenceClassification.from_pretrained("pace-group-51/fine-tuned-bert")
+HF_API_URL = "https://api-inference.huggingface.co/models/pace-group-51/fine-tuned-bert"
+HF_HEADERS = {"Authorization": "Bearer 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"}  # API key after "Bearer "
 
 # home route - handles GET requests and renders HTML template
 @app.route('/')
@@ -29,12 +32,18 @@ def index():
 
 # function to use BERT for text classification
 def bert_predict(text):
-    inputs = tokenizer(text, return_tensors="pt", truncation=True, padding=True)
-    with torch.no_grad():
-        outputs = bert_model(**inputs)
-    logits = outputs.logits
-    predicted_class = torch.argmax(logits, dim=1).item()
-    return "AI" if predicted_class == 1 else "Human"
+    response = requests.post(HF_API_URL, headers=HF_HEADERS, json={"inputs": text})
+    if response.status_code == 200:
+        prediction = response.json()
+        # print(prediction)
+        if isinstance(prediction, list) and len(prediction) > 0:
+            predicted_label = prediction[0][0]['label']
+            return "AI" if predicted_label == "LABEL_1" else "Human"
+        else:
+            return "Unexpected response format."
+    else:
+        logging.error(f"Hugging Face API Error: {response.status_code} - {response.text}")
+        return "Error communicating with Hugging Face API."
 
 # check route - handles POST requests /check URL
 @app.route('/check', methods=['POST'])
