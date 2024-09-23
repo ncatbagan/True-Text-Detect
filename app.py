@@ -1,34 +1,46 @@
 import logging
-from flask import Flask, request, render_template
+from flask import Flask, request, render_template, make_response
 from openai import OpenAI
 import google.generativeai as genai
 from transformers import BertTokenizer, BertForSequenceClassification
 import torch
 import requests
+from datetime import datetime
+import json
 
-# initialize logging
-logging.basicConfig(filename='app.log', level=logging.ERROR)
+# initialize logging - feel free to uncomment to view logs in console
+# logging.basicConfig(level=logging.DEBUG) 
+# logging.basicConfig(filename='app.log', level=logging.ERROR)
 
 # flask backend
 app = Flask(__name__)
 
 # initialise openai
-client = OpenAI(api_key="<OpenAI API Key>")
+client = OpenAI(api_key="<openai key>")
 
 # initialise gemini ai
-genai.configure(api_key="<Gemini API Key>")
+genai.configure(api_key="<gemini ai key>")
 gemini_model = genai.GenerativeModel("gemini-1.5-flash")
 
 # initialise BERT & configure Hugging Face API
 tokenizer = BertTokenizer.from_pretrained("pace-group-51/fine-tuned-bert")
 bert_model = BertForSequenceClassification.from_pretrained("pace-group-51/fine-tuned-bert")
 HF_API_URL = "https://api-inference.huggingface.co/models/pace-group-51/fine-tuned-bert"
-HF_HEADERS = {"Authorization": "Bearer <Hugging Face API Key>"}
+HF_HEADERS = {"Authorization": "Bearer <hugging face api key"}
+
+@app.before_request
+def log_cookies():
+    logging.debug(f"Cookies: {request.cookies}")
 
 # home route - handles GET requests and renders HTML template
 @app.route('/')
 def index():
-    return render_template('index.html')
+    history = request.cookies.get('history')
+    if history:
+        history = json.loads(history)
+    else:
+        history = []
+    return render_template('index.html', history=history)
 
 # function to use BERT for text classification
 def bert_predict(text):
@@ -38,7 +50,7 @@ def bert_predict(text):
         # print(prediction)
         if isinstance(prediction, list) and len(prediction) > 0:
             predicted_label = prediction[0][0]['label']
-            return "AI" if predicted_label == "LABEL_1" else "Human"
+            return "This text is AI-generated." if predicted_label == "LABEL_1" else "This text is written by a human."
         else:
             return "Unexpected response format."
     else:
@@ -49,8 +61,17 @@ def bert_predict(text):
 @app.route('/check', methods=['POST'])
 def check():
     user_input = request.form.get('text', '')  # retrieves user text input
-    if not user_input:  # error handling
-        return render_template('index.html', openai_result="No text provided.", gemini_result="No text provided.", bert_result="No text provided.", text=user_input)
+    logging.debug(f"User input: {user_input}") # logging
+
+    # Get current history from cookies
+    history = request.cookies.get('history')
+    if history:
+        history = json.loads(history)
+    else:
+        history = []
+
+    if not user_input:  # if there's no input, render the existing history
+        return render_template('index.html', openai_result="No text provided.", gemini_result="No text provided.", bert_result="No text provided.", text=user_input, history=history)
 
     # question variable
     question = "Is the following text written by AI? :\n\n" + user_input
@@ -85,8 +106,38 @@ def check():
         bert_result = f"Error: {str(e)}"
         logging.error(f"BERT Error: {str(e)}")  # Log error to app.log
 
-    return render_template('index.html', openai_result=openai_result, gemini_result=gemini_result, bert_result=bert_result, text=user_input)
+    # Update the history with trimmed results
+    def limit_to_first_five_words(text):
+        return ' '.join(text.split()[:5])
 
+    # Prepare new entry
+    new_entry = {
+        'input': limit_to_first_five_words(user_input) + "...",
+        'openai': openai_result,
+        'gemini': limit_to_first_five_words(gemini_result) + "...",
+        'bert': limit_to_first_five_words(bert_result),
+        'timestamp': datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+    }
+
+    # Get current history from cookies
+    history = request.cookies.get('history')
+    if history:
+        history = json.loads(history)
+    else:
+        history = []
+
+    # Append new entry and limit to the last 10 entries
+    history.append(new_entry)
+    if len(history) > 10:
+        history = history[-10:]  # Keep only the last 10 entries
+
+    # Set updated history in cookies
+    resp = make_response(render_template('index.html', openai_result=openai_result, gemini_result=gemini_result, bert_result=bert_result, text=user_input, history=history))
+    resp.set_cookie('history', json.dumps(history), max_age=60*60*24)  # Cookie expires in 1 day
+
+    logging.debug(f"Updated history: {history}")
+
+    return resp
 # run application
 if __name__ == '__main__':
     app.run(debug=True)

@@ -3,36 +3,50 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI Text Detection</title>
+    <title>True Text Detect</title>
     <link rel="stylesheet" href="/static/styles.css">
 </head>
 <body>
-    <div class="container">
-        <h1>Is it AI?</h1>
-        <form action="/check" method="post">
-            <textarea name="text" rows="4" placeholder="Enter the text to check...">{{ text }}</textarea>
-            <input type="submit" value="Check">
-        </form>
-        <div class="results">
-            {% if openai_result %}
-                <div class="result-box">
-                    <h2>OpenAI Result:</h2>
-                    <p>{{ openai_result }}</p>
-                </div>
-            {% endif %}
-            {% if gemini_result %}
-                <div class="result-box">
-                    <h2>Gemini AI Result:</h2>
-                    <p>{{ gemini_result }}</p>
-                </div>
-            {% endif %}
-            {% if bert_result %}
-                <div class="result-box">
-                    <h2>BERT Result:</h2>
-                    <p>{{ bert_result }}</p>
-                </div>
-            {% endif %}
-        </div>
+<div class="container">
+    <h1>True Text Detect</h1>
+    <form action="/check" method="post">
+        <textarea name="text" rows="4" placeholder="Enter the text to check...">{{ text }}</textarea>
+        <input type="submit" value="Check my text">
+    </form>
+    <div class="results">
+        {% if openai_result %}
+            <div class="result-box">
+                <h2>OpenAI Result:</h2>
+                <p>{{ openai_result }}</p>
+            </div>
+        {% endif %}
+        {% if gemini_result %}
+            <div class="result-box">
+                <h2>Gemini AI Result:</h2>
+                <p>{{ gemini_result }}</p>
+            </div>
+        {% endif %}
+        {% if bert_result %}
+            <div class="result-box">
+                <h2>BERT Result:</h2>
+                <p>{{ bert_result }}</p>
+            </div>
+        {% endif %}
     </div>
-</body>
-</html>
+</div>
+<div class="history-container">
+    <div class="history">
+        <h2>Previous Inputs</h2>
+        <ul>
+            {% for entry in history %}
+                <li>
+                    <strong>Timestamp:</strong> {{ entry.timestamp }}<br>
+                    <strong>Input:</strong> {{ entry.input.split(' ', 5) | join(' ') }}<br>
+                    <strong>OpenAI:</strong> {{ entry.openai }}<br>
+                    <strong>Gemini:</strong> {{ entry.gemini }}<br>
+                    <strong>BERT:</strong> {{ entry.bert }}<br>
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+</div>

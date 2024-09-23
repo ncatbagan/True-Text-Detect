@@ -1,94 +1,118 @@
-/* applies to all aspects */
+/* Applies to all aspects */
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
 }
 
-/* body styling */
+/* Body styling */
 body {
-  font-family: Arial, sans-serif;
-  line-height: 1.6;
-  background-color: #121212; /* Dark background */
-  color: #e0e0e0; /* Light text color */
-  height: 100vh; /* Full height of the viewport */
-  display: flex; /* Use flexbox to center content */
-  flex-direction: column; /* Stack elements vertically */
-  justify-content: center; /* Center content vertically */
-  align-items: center; /* Center content horizontally */
+  font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: #FEFFFE; /* MQ cream background */
+  color: #090809; /* MQ text color */
+  display: flex; /* Use flexbox for layout */
+  justify-content: center; /* Center content horizontally */
+  padding: 20px; /* Padding around the page */
 }
 
-/* container styling */
+/* Container styling */
 .container {
+  background: #EBE8E0; /* Container background */
+  padding: 20px; /* Padding inside the container */
+  margin: 10px;
+  max-width: 800px; /* Max width for the container */
   width: 100%; /* Full width */
-  padding: 20px;
-  background: #1e1e1e; /* Slightly lighter background for container */
-  border-radius: 8px;
-  box-shadow: 0 0 20px rgba(0, 0, 0, 0.7); /* Darker shadow for better contrast */
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.7); /* Subtle shadow */
 }
 
-/* header styling */
+/* Container styling */
+.history-container {
+  background: #EBE8E0; /* Container background */
+  padding: 20px; /* Padding inside the container */
+  margin: 10px;
+  max-width: 800px; /* Max width for the container */
+  width: 100%; /* Full width */
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.7); /* Subtle shadow */
+}
+
+/* Title styling */
 h1 {
   text-align: center;
-  color: #e0e0e0; /* Light text color */
+  color: #363B36;
   margin-bottom: 20px;
 }
 
-/* form styling */
+/* Form styling */
 form {
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 10px; /* Space between form elements */
+  margin-bottom: 20px; /* Space below the form */
 }
 
 textarea {
   width: 100%;
   padding: 10px;
-  border: 1px solid #333; /* dark border for textarea */
-  border-radius: 4px;
-  background-color: #333; /* dark background for textarea */
-  color: #e0e0e0; /* light text color */
-  resize: vertical;
+  border: 1px solid #a3a29a; /* Border for textarea */
+  background-color: #FEFFFE; /* MQ background for textarea */
+  color: #090809; /* MQ text color */
+  resize: vertical; /* Allow vertical resizing */
 }
 
 input[type="submit"] {
-  background-color: #5cb85c; /* green button */
-  color: #fff; /* white text */
+  background-color: #681e2d; /* Red button */
+  color: #FEFFFE; /* White text */
   border: none;
   padding: 10px 15px;
-  border-radius: 4px;
   cursor: pointer;
   font-size: 16px;
-  transition: background-color 0.3s; /* smooth transition */
+  transition: background-color 0.3s; /* Smooth transition */
 }
 
 input[type="submit"]:hover {
-  background-color: #4cae4c; /* darker green on hover */
+  background-color: rgb(58, 13, 22); /* Darker red on hover */
 }
 
-/* result section styling */
+/* Results section styling */
 .results {
-  display: flex;
-  flex-direction: column; /* stack results vertically */
-  gap: 20px; /* space between result boxes */
-  margin-top: 20px;
-  width: 100%; /* Full width for results */
+  display: flex; /* Use flexbox for alignment */
+  flex-direction: column; /* Stack results vertically */
+  gap: 20px; /* Space between result boxes */
 }
 
 .result-box {
-  background: #333; /* dark background for results */
-  border: 1px solid #444; /* slightly lighter border */
+  background: #FEFFFE; /* MQ background for results */
+  border: 1px solid #a3a29a; /* Slightly darker border */
   padding: 10px;
-  border-radius: 4px;
-  color: #e0e0e0; /* light text color */
-  transition: transform 0.2s; /* smooth scaling on hover */
+  color: #363B36; /* MQ text color */
+  transition: transform 0.2s; /* Smooth scaling on hover */
 }
 
 .result-box:hover {
-  transform: scale(1.02); /* scale effect on hover */
+  transform: scale(1.02); /* Scale effect on hover */
 }
 
-h2 {
-  color: #e0e0e0; /* light text color */
-  margin-bottom: 10px;
+/* History section styling */
+.history {
+  margin-top: 20px; /* Space above history */
+  border-top: 1px solid #292627; /* Top border for separation */
+  padding-top: 10px; /* Space below the border */
+}
+
+.history h2 {
+  margin-bottom: 10px; /* Space below history title */
+  color: #363B36;
+}
+
+.history ul {
+  list-style-type: none; /* Remove default list styling */
+  padding-left: 0; /* Remove padding */
+}
+
+.history li {
+  background: #FEFFFE; /* Darker background for history items */
+  border: 1px solid #a3a29a; /* Slightly darker border */
+  color: #363B36; /* MQ text color */
+  padding: 10px;
+  margin-bottom: 10px; /* Space between history items */
 }

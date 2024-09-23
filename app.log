@@ -112,3 +112,146 @@ INFO:werkzeug: * Detected change in 'c:\\Users\\noric\\Documents\\PACE-Group51\\
 INFO:werkzeug: * Restarting with stat
 WARNING:werkzeug: * Debugger is active!
 INFO:werkzeug: * Debugger PIN: 985-865-555
+INFO:werkzeug:[31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+INFO:werkzeug:[33mPress CTRL+C to quit[0m
+INFO:werkzeug: * Restarting with stat
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 985-865-555
+INFO:werkzeug:127.0.0.1 - - [23/Sep/2024 18:44:22] "GET / HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [23/Sep/2024 18:44:22] "GET /static/styles.css HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [23/Sep/2024 18:44:22] "[33mGET /favicon.ico HTTP/1.1[0m" 404 -
+INFO:werkzeug:127.0.0.1 - - [23/Sep/2024 18:45:08] "GET / HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [23/Sep/2024 18:45:08] "GET /static/styles.css HTTP/1.1" 200 -
+ERROR:root:Hugging Face API Error: 503 - {"error":"Model pace-group-51/fine-tuned-bert is currently loading","estimated_time":20.0}
+INFO:werkzeug:127.0.0.1 - - [23/Sep/2024 18:45:41] "POST /check HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [23/Sep/2024 18:45:41] "[36mGET /static/styles.css HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [23/Sep/2024 18:47:21] "POST /check HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [23/Sep/2024 18:47:21] "GET /static/styles.css HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [23/Sep/2024 18:48:43] "POST /check HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [23/Sep/2024 18:49:12] "POST /check HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [23/Sep/2024 18:49:48] "POST /check HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [23/Sep/2024 18:50:41] "POST /check HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [23/Sep/2024 18:50:45] "GET / HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [23/Sep/2024 18:51:38] "GET / HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [23/Sep/2024 18:51:38] "GET /static/styles.css HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [23/Sep/2024 18:51:49] "POST /check HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [23/Sep/2024 18:51:49] "[36mGET /static/styles.css HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [23/Sep/2024 18:52:14] "POST /check HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [23/Sep/2024 18:52:14] "[36mGET /static/styles.css HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [23/Sep/2024 18:53:25] "POST /check HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [23/Sep/2024 18:53:25] "GET /static/styles.css HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [23/Sep/2024 18:53:43] "POST /check HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [23/Sep/2024 18:53:43] "[36mGET /static/styles.css HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [23/Sep/2024 18:53:52] "POST /check HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [23/Sep/2024 18:53:52] "GET /static/styles.css HTTP/1.1" 200 -
+INFO:werkzeug:[31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+INFO:werkzeug:[33mPress CTRL+C to quit[0m
+INFO:werkzeug: * Restarting with stat
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 985-865-555
+INFO:werkzeug:127.0.0.1 - - [23/Sep/2024 20:34:27] "GET / HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [23/Sep/2024 20:34:27] "GET /static/styles.css HTTP/1.1" 200 -
+ERROR:root:Hugging Face API Error: 503 - {"error":"Model pace-group-51/fine-tuned-bert is currently loading","estimated_time":20.0}
+INFO:werkzeug:127.0.0.1 - - [23/Sep/2024 20:36:53] "POST /check HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [23/Sep/2024 20:36:53] "[36mGET /static/styles.css HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [23/Sep/2024 20:37:47] "POST /check HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [23/Sep/2024 20:37:47] "GET /static/styles.css HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [23/Sep/2024 20:39:17] "POST /check HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [23/Sep/2024 20:39:17] "[36mGET /static/styles.css HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [23/Sep/2024 20:39:30] "POST /check HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [23/Sep/2024 20:39:30] "[36mGET /static/styles.css HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [23/Sep/2024 20:40:25] "GET / HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [23/Sep/2024 20:40:25] "[36mGET /static/styles.css HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [23/Sep/2024 20:41:51] "GET / HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [23/Sep/2024 20:41:51] "GET /static/styles.css HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [23/Sep/2024 20:43:18] "GET / HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [23/Sep/2024 20:43:18] "GET /static/styles.css HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [23/Sep/2024 20:43:32] "GET / HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [23/Sep/2024 20:43:32] "GET /static/styles.css HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [23/Sep/2024 20:43:56] "GET / HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [23/Sep/2024 20:43:56] "[36mGET /static/styles.css HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [23/Sep/2024 20:43:58] "GET / HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [23/Sep/2024 20:43:58] "GET /static/styles.css HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [23/Sep/2024 20:44:22] "GET / HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [23/Sep/2024 20:44:22] "GET /static/styles.css HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [23/Sep/2024 20:44:34] "POST /check HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [23/Sep/2024 20:44:34] "[36mGET /static/styles.css HTTP/1.1[0m" 304 -
+INFO:werkzeug: * Detected change in 'c:\\Users\\noric\\Documents\\PACE-Group51\\app.py', reloading
+INFO:werkzeug: * Restarting with stat
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 985-865-555
+INFO:werkzeug:127.0.0.1 - - [23/Sep/2024 20:49:59] "POST /check HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [23/Sep/2024 20:49:59] "[36mGET /static/styles.css HTTP/1.1[0m" 304 -
+INFO:werkzeug: * Detected change in 'c:\\Users\\noric\\Documents\\PACE-Group51\\app.py', reloading
+INFO:werkzeug: * Restarting with stat
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 985-865-555
+INFO:werkzeug:127.0.0.1 - - [23/Sep/2024 20:51:27] "POST /check HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [23/Sep/2024 20:51:27] "[36mGET /static/styles.css HTTP/1.1[0m" 304 -
+ERROR:root:Hugging Face API Error: 503 - {"error":"Model pace-group-51/fine-tuned-bert is currently loading","estimated_time":20.0}
+INFO:werkzeug:127.0.0.1 - - [23/Sep/2024 20:51:52] "POST /check HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [23/Sep/2024 20:51:52] "[36mGET /static/styles.css HTTP/1.1[0m" 304 -
+ERROR:root:Hugging Face API Error: 503 - {"error":"Model pace-group-51/fine-tuned-bert is currently loading","estimated_time":20.0}
+INFO:werkzeug:127.0.0.1 - - [23/Sep/2024 20:51:59] "POST /check HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [23/Sep/2024 20:51:59] "[36mGET /static/styles.css HTTP/1.1[0m" 304 -
+INFO:werkzeug: * Detected change in 'c:\\Users\\noric\\Documents\\PACE-Group51\\app.py', reloading
+INFO:werkzeug: * Restarting with stat
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 985-865-555
+INFO:werkzeug:127.0.0.1 - - [23/Sep/2024 20:53:44] "POST /check HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [23/Sep/2024 20:53:44] "[36mGET /static/styles.css HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [23/Sep/2024 20:55:17] "GET / HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [23/Sep/2024 20:55:17] "GET /static/styles.css HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [23/Sep/2024 20:55:17] "[33mGET /favicon.ico HTTP/1.1[0m" 404 -
+INFO:werkzeug:127.0.0.1 - - [23/Sep/2024 20:55:37] "POST /check HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [23/Sep/2024 20:55:37] "[36mGET /static/styles.css HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [23/Sep/2024 20:55:58] "POST /check HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [23/Sep/2024 20:55:58] "[36mGET /static/styles.css HTTP/1.1[0m" 304 -
+INFO:werkzeug: * Detected change in 'c:\\Users\\noric\\Documents\\PACE-Group51\\app.py', reloading
+INFO:werkzeug: * Restarting with stat
+INFO:werkzeug:[31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+INFO:werkzeug:[33mPress CTRL+C to quit[0m
+INFO:werkzeug: * Restarting with stat
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 985-865-555
+INFO:werkzeug:127.0.0.1 - - [23/Sep/2024 20:58:23] "GET / HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [23/Sep/2024 20:58:23] "[36mGET /static/styles.css HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [23/Sep/2024 20:58:36] "POST /check HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [23/Sep/2024 20:58:36] "[36mGET /static/styles.css HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [23/Sep/2024 20:58:58] "POST /check HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [23/Sep/2024 20:58:58] "[36mGET /static/styles.css HTTP/1.1[0m" 304 -
+INFO:werkzeug: * Detected change in 'c:\\Users\\noric\\Documents\\PACE-Group51\\app.py', reloading
+INFO:werkzeug: * Restarting with stat
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 985-865-555
+INFO:werkzeug:127.0.0.1 - - [23/Sep/2024 21:01:50] "POST /check HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [23/Sep/2024 21:01:50] "[36mGET /static/styles.css HTTP/1.1[0m" 304 -
+INFO:werkzeug: * Detected change in 'c:\\Users\\noric\\Documents\\PACE-Group51\\app.py', reloading
+INFO:werkzeug: * Restarting with stat
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 985-865-555
+INFO:werkzeug:127.0.0.1 - - [23/Sep/2024 21:03:02] "[35m[1mPOST /check HTTP/1.1[0m" 500 -
+INFO:werkzeug:127.0.0.1 - - [23/Sep/2024 21:03:03] "GET /check?__debugger__=yes&cmd=resource&f=style.css HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [23/Sep/2024 21:03:03] "GET /check?__debugger__=yes&cmd=resource&f=debugger.js HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [23/Sep/2024 21:03:03] "GET /check?__debugger__=yes&cmd=resource&f=console.png&s=HkpblpUgh6GKBoujpNe3 HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [23/Sep/2024 21:03:03] "GET /check?__debugger__=yes&cmd=resource&f=console.png HTTP/1.1" 200 -
+INFO:werkzeug: * Detected change in 'c:\\Users\\noric\\Documents\\PACE-Group51\\app.py', reloading
+INFO:werkzeug: * Restarting with stat
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 985-865-555
+INFO:werkzeug:127.0.0.1 - - [23/Sep/2024 21:03:46] "POST /check HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [23/Sep/2024 21:03:46] "[36mGET /static/styles.css HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [23/Sep/2024 21:03:57] "POST /check HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [23/Sep/2024 21:03:57] "[36mGET /static/styles.css HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [23/Sep/2024 21:09:05] "GET / HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [23/Sep/2024 21:09:05] "GET /static/styles.css HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [23/Sep/2024 21:09:12] "POST /check HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [23/Sep/2024 21:09:12] "[36mGET /static/styles.css HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [23/Sep/2024 21:09:33] "POST /check HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [23/Sep/2024 21:09:33] "[36mGET /static/styles.css HTTP/1.1[0m" 304 -
+INFO:werkzeug: * Detected change in 'c:\\Users\\noric\\Documents\\PACE-Group51\\app.py', reloading
+INFO:werkzeug: * Restarting with stat
+INFO:werkzeug: * Restarting with stat
