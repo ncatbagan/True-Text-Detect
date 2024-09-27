@@ -7,6 +7,9 @@ import torch
 import requests
 from datetime import datetime
 import json
+from flask_limiter import Limiter
+from flask_limiter.util import get_remote_address
+import re
 
 # initialize logging - feel free to uncomment to view logs in console
 # logging.basicConfig(level=logging.DEBUG) 
@@ -15,22 +18,35 @@ import json
 # flask backend
 app = Flask(__name__)
 
+# initialise rate limiter
+limiter = Limiter(
+    get_remote_address,
+    app=app,
+    default_limits=["200 per day", "50 per hour"],
+    storage_uri="memory://",
+)
+
 # initialise openai
-client = OpenAI(api_key="<openai key>")
+client = OpenAI(api_key="<openai api key>")
 
 # initialise gemini ai
-genai.configure(api_key="<gemini ai key>")
+genai.configure(api_key="<gemini api key>")
 gemini_model = genai.GenerativeModel("gemini-1.5-flash")
 
 # initialise BERT & configure Hugging Face API
 tokenizer = BertTokenizer.from_pretrained("pace-group-51/fine-tuned-bert")
 bert_model = BertForSequenceClassification.from_pretrained("pace-group-51/fine-tuned-bert")
 HF_API_URL = "https://api-inference.huggingface.co/models/pace-group-51/fine-tuned-bert"
-HF_HEADERS = {"Authorization": "Bearer <hugging face api key"}
+HF_HEADERS = {"Authorization": "Bearer <huggingface key>"}
 
 @app.before_request
 def log_cookies():
     logging.debug(f"Cookies: {request.cookies}")
+
+# Sanitize user input
+def sanitize_input(user_input):
+    sanitized_input = re.sub(r'<.*?>', '', user_input)  # Remove any HTML tags
+    return sanitized_input
 
 # home route - handles GET requests and renders HTML template
 @app.route('/')
@@ -59,9 +75,11 @@ def bert_predict(text):
 
 # check route - handles POST requests /check URL
 @app.route('/check', methods=['POST'])
+@limiter.limit("5 per minute") # Limit to 5 requests per minute per IP
 def check():
-    user_input = request.form.get('text', '')  # retrieves user text input
-    logging.debug(f"User input: {user_input}") # logging
+    user_input = request.form.get('text', '')  # Retrieve user text input
+    user_input = sanitize_input(user_input)    # Sanitize user input
+    logging.debug(f"Sanitized User input: {user_input}") # logging
 
     # Get current history from cookies
     history = request.cookies.get('history')
