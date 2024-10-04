@@ -4,49 +4,45 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>True Text Detect</title>
+    
     <link rel="stylesheet" href="/static/styles.css">
+    <script src="script.js" defer></script>
 </head>
 <body>
-<div class="container">
-    <h1>True Text Detect</h1>
-    <form action="/check" method="post">
-        <textarea name="text" rows="4" placeholder="Enter the text to check...">{{ text }}</textarea>
-        <input type="submit" value="Check my text">
-    </form>
-    <div class="results">
-        {% if openai_result %}
-            <div class="result-box">
-                <h2>OpenAI Result:</h2>
-                <p>{{ openai_result }}</p>
+    <div class="navbar">
+        <img id="mqicon" src="/static/images/icon.png" alt="Icon"/>
+        <div class="navbar-right">
+            <a href="/" class="nav-link">Home</a>
+            <div class="dropdown">
+                <button class="nav-link dropdown-button">About</button>
+                <div class="dropdown-content">
+                    <a href="/about/purpose">Purpose</a>
+                    <a href="/about/ai-models">AI Models</a>                    
+                </div>
             </div>
-        {% endif %}
-        {% if gemini_result %}
-            <div class="result-box">
-                <h2>Gemini AI Result:</h2>
-                <p>{{ gemini_result }}</p>
-            </div>
-        {% endif %}
-        {% if bert_result %}
-            <div class="result-box">
-                <h2>BERT Result:</h2>
-                <p>{{ bert_result }}</p>
-            </div>
-        {% endif %}
+            <a href="/logs" class="nav-link">Logs</a>
+        </div>
     </div>
-</div>
-<div class="history-container">
-    <div class="history">
-        <h2>Previous Inputs</h2>
-        <ul>
-            {% for entry in history %}
-                <li>
-                    <strong>Timestamp:</strong> {{ entry.timestamp }}<br>
-                    <strong>Input:</strong> {{ entry.input.split(' ', 5) | join(' ') }}<br>
-                    <strong>OpenAI:</strong> {{ entry.openai }}<br>
-                    <strong>Gemini:</strong> {{ entry.gemini }}<br>
-                    <strong>BERT:</strong> {{ entry.bert }}<br>
-                </li>
-            {% endfor %}
-        </ul>
+    <div class="container">
+        <h1>True Text Detect</h1>
+        <p id="homeinfo">
+            Analyse suspicious texts to verify it’s authenticity. Our analyser employs multiple trained models to look through each text submission and generate a score and probability based on what it has found.
+        </p>
+        <form action="/check" method="POST">
+            <textarea name="text" rows="4" placeholder="Enter text to analyze..."></textarea>
+            <input type="submit" value="Check Text">
+        </form>
+        <div class="results">
+            {% if openai_result %}
+            <div class="result-box">OpenAI Result: {{ openai_result }}</div>
+            {% endif %}
+            {% if gemini_result %}
+            <div class="result-box">Gemini Result: {{ gemini_result }}</div>
+            {% endif %}
+            {% if bert_result %}
+            <div class="result-box">BERT Result: {{ bert_result }}</div>
+            {% endif %}
+        </div>
     </div>
-</div>
+</body>
+</html>

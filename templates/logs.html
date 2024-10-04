@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Logs</title>
+    <link rel="stylesheet" href="/static/styles.css">
+    <script src="script.js" defer></script>
+</head>
+<body>
+    <div class="navbar">
+        <img id="mqicon" src="/static/images/icon.png" alt="Icon"/>
+        <div class="navbar-right">
+            <a href="/" class="nav-link">Home</a>
+            <div class="dropdown">
+                <button class="nav-link dropdown-button">About</button>
+                <div class="dropdown-content">
+                    <a href="/about/purpose">Purpose</a>
+                    <a href="/about/ai-models">AI Models</a>                    
+                </div>
+            </div>
+            <a href="/logs" class="nav-link">Logs</a>
+        </div>
+    </div>
+    <div class="container">
+        <h1>History of Checks</h1>
+        <div class="history-container">
+            {% for entry in history %}
+            <div class="entry-container">
+                <strong>Input:</strong> {{ entry.input }}<br>
+                <strong>OpenAI:</strong> {{ entry.openai }}<br>
+                <strong>Gemini:</strong> {{ entry.gemini }}<br>
+                <strong>BERT:</strong> {{ entry.bert }}<br>
+                <strong>Timestamp:</strong> {{ entry.timestamp }}
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</body>
+</html>

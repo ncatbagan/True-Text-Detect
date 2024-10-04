@@ -11,7 +11,7 @@ from flask_limiter import Limiter
 from flask_limiter.util import get_remote_address
 import re
 
-# initialize logging - feel free to uncomment to view logs in console
+# initialise logging - feel free to uncomment to view logs in console
 # logging.basicConfig(level=logging.DEBUG) 
 # logging.basicConfig(filename='app.log', level=logging.ERROR)
 
@@ -43,7 +43,7 @@ HF_HEADERS = {"Authorization": "Bearer <huggingface key>"}
 def log_cookies():
     logging.debug(f"Cookies: {request.cookies}")
 
-# Sanitize user input
+# sanitise user input
 def sanitize_input(user_input):
     sanitized_input = re.sub(r'<.*?>', '', user_input)  # Remove any HTML tags
     return sanitized_input
@@ -51,12 +51,26 @@ def sanitize_input(user_input):
 # home route - handles GET requests and renders HTML template
 @app.route('/')
 def index():
+    return render_template('index.html')
+
+# about route
+@app.route('/about/purpose')
+def purpose():
+    return render_template('purpose.html')
+
+@app.route('/about/ai-models')
+def ai_models():
+    return render_template('ai_models.html')
+
+# logs route
+@app.route('/logs')
+def logs():
     history = request.cookies.get('history')
     if history:
         history = json.loads(history)
     else:
         history = []
-    return render_template('index.html', history=history)
+    return render_template('logs.html', history=history)
 
 # function to use BERT for text classification
 def bert_predict(text):
@@ -91,7 +105,7 @@ def check():
     if not user_input:  # if there's no input, render the existing history
         return render_template('index.html', openai_result="No text provided.", gemini_result="No text provided.", bert_result="No text provided.", text=user_input, history=history)
 
-    # question variable
+    # question variables
     question = "Is the following text written by AI? :\n\n" + user_input
     geminiQuestion = "Is the following text written by AI? Can you judge by rating either no, unlikely, uncertain, likely, yes? Can you quote what phrases appear to be AI or Human authored? Can you list reasons as to why it is AI or human authored? : \n\n" + user_input
 
@@ -156,6 +170,7 @@ def check():
     logging.debug(f"Updated history: {history}")
 
     return resp
+
 # run application
 if __name__ == '__main__':
     app.run(debug=True)
