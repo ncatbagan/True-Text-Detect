@@ -3,25 +3,41 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login</title>
+    <title>True Text Detect</title>
     <link rel="stylesheet" href="/static/styles.css">
     <script src="script.js" defer></script>
 </head>
 <body>
-    <div class="container">
-        {% with messages = get_flashed_messages() %}
+    <div class="navbar">
+        <img id="mqicon" src="/static/images/icon.png" alt="Icon"/>
+    </div>
+    <div class="login-container">
+        <h1 class="login-h1">Login to True Text Detect</h1>
+        {% with messages = get_flashed_messages(with_categories=true) %}
             {% if messages %}
-                {% for msg in messages %}
-                    <p>{{msg}}</p>
-                {% endfor %}
+                <div class="alert">
+                    {% for category, message in messages %}
+                        <div class="{{ category }}">{{ message }}</div>
+                    {% endfor %}
+                </div>
             {% endif %}
         {% endwith %}
-        <form action="" method="post">
+        <form action="" method="post" class="login-form">
             {{ form.hidden_tag() }}
-            {{ form.username }}<br>
-            {{ form.password }}<br>
-            {{ form.submit }}
-            <a href="/register">Register</a> 
+            <div class="form-group">
+                {{ form.username.label(class="form-label") }}
+                {{ form.username(class="form-input") }}
+            </div>
+            <div class="form-group">
+                {{ form.password.label(class="form-label") }}
+                {{ form.password(class="form-input") }}
+            </div>
+            <div id="login-button" class="form-group">
+                {{ form.submit(class="login-button") }}
+            </div>
+            <div class="register-link">
+                <p>Don't have an account? <a href="/register">Register</a></p>
+            </div>
         </form>
     </div>
 </body>

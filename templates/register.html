@@ -3,29 +3,45 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login</title>
+    <title>Register</title>
     <link rel="stylesheet" href="/static/styles.css">
     <script src="script.js" defer></script>
 </head>
 <body>
-    <div class="container">
+    <div class="navbar">
+        <img id="mqicon" src="/static/images/icon.png" alt="Icon"/>
+    </div>
+    <div class="login-container">
+        <h1 class="register-h1">Register to True Text Detect</h1>
         {% with messages = get_flashed_messages() %}
             {% if messages %}
-                {% for msg in messages %}
-                    <p>{{msg}}</p>
-                {% endfor %}
+                <div class="alert">
+                    {% for msg in messages %}
+                        <p>{{ msg }}</p>
+                    {% endfor %}
+                </div>
             {% endif %}
         {% endwith %}
-        {% for error in form.password2.errors %}
-            {{ error }}
-        {% endfor %}
-        <form action="" method="post">
+        <form action="" method="post" class="register-form">
             {{ form.hidden_tag() }}
-            {{ form.username }}<br>
-            {{ form.password }}<br>
-            {{ form.password2 }}<br>
-            {{ form.submit }}
-            <a href="/">Login</a> 
+            <div class="form-group">
+                {{ form.username.label(class="form-label") }} 
+                {{ form.username(class="form-input") }}
+            </div>
+            <div class="form-group">
+                {{ form.password.label(class="form-label") }} 
+                {{ form.password(class="form-input") }}
+            </div>
+            <div class="form-group">
+                <label class="form-label" for="password2">Repeat Password</label>
+                {{ form.password2(class="form-input") }}
+            </div>
+            <div class="form-group">
+                {{ form.submit(class="login-button") }}
+            </div>
+            <div class="register-link">
+                <p>Already have an account? <a href="/">Log in</a></p>
+            </div>
         </form>
     </div>
 </body>

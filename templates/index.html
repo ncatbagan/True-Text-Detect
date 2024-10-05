@@ -21,14 +21,17 @@
                 </div>
             </div>
             <a href="/logs" class="nav-link">Logs</a>
-            <a href="{{url_for('logout')}}" class="btn btn-logout">Logout</a>
+            <a href="{{url_for('logout')}}" class="btn-btn-logout">
+                <img src="/static/images/logouticon.png" alt="Logout Icon" id="logout-icon">
+                Logout
+            </a>
         </div>
     </div>
     <div class="container">
         {% with messages = get_flashed_messages() %}
             {% if messages %}
                 {% for msg in messages %}
-                    <p>{{msg}}</p>
+                    <div class="success-alert">{{ msg }}</div>
                 {% endfor %}
             {% endif %}
         {% endwith %}
@@ -37,8 +40,8 @@
             Analyse suspicious texts to verify it’s authenticity. Our analyser employs multiple trained models to look through each text submission and generate a score and probability based on what it has found.
         </p>
         <form action="/check" method="POST">
-            <textarea name="text" rows="4" placeholder="Enter text to analyze..."></textarea>
-            <input type="submit" value="Check Text">
+            <textarea name="text" rows="4" placeholder="Enter text to analyse..."></textarea>
+            <input class="checkbtn" type="submit" value="Check Text">
         </form>
         <div class="results">
             {% if openai_result %}
