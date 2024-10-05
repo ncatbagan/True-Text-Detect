@@ -1,5 +1,5 @@
 import logging
-from flask import Flask, request, render_template, make_response
+from flask import Flask, request, render_template, make_response, redirect, url_for
 from openai import OpenAI
 import google.generativeai as genai
 from transformers import BertTokenizer, BertForSequenceClassification
@@ -11,12 +11,67 @@ from flask_limiter import Limiter
 from flask_limiter.util import get_remote_address
 import re
 
+from flask_login import UserMixin, login_user, LoginManager, login_required, logout_user, current_user
+from werkzeug.security import generate_password_hash, check_password_hash
+from flask_sqlalchemy import SQLAlchemy
+from flask_wtf import FlaskForm
+from wtforms import StringField, PasswordField, SubmitField
+from wtforms.validators import InputRequired, Length, ValidationError
 # initialise logging - feel free to uncomment to view logs in console
 # logging.basicConfig(level=logging.DEBUG) 
 # logging.basicConfig(filename='app.log', level=logging.ERROR)
 
 # flask backend
 app = Flask(__name__)
+app.secret_key = "secret"
+
+# Configure SQL Alchemy
+app.config["SQLALCHEMY_DATABASE_URI"] = 'sqlite:///users.db'
+app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
+db = SQLAlchemy(app)
+
+# Login manager
+login_manager = LoginManager()
+login_manager.init_app(app)
+login_manager.login_view = 'login'
+
+@login_manager.user_loader
+def load_user(user_id):
+    return User.query.get(int(user_id))
+
+# Database User Model
+class User(db.Model, UserMixin): 
+    id = db.Column(db.Integer, primary_key=True)
+    username = db.Column(db.String(25), unique=True, nullable=False)
+    password_hash = db.Column(db.String(150), nullable=False)
+
+    def set_password(self, password):
+        self.password_hash = generate_password_hash(password)
+
+    def check_password(self, password):
+        return check_password_hash(self.password_hash, password)
+
+class RegistrationForm(FlaskForm):
+    username = StringField(validators=[InputRequired(), Length(
+        min=4, max=20)], render_kw={'placeholder': "Username"})
+    password = PasswordField(validators=[InputRequired(), Length(
+        min=4, max=20)], render_kw={"placeholder": "Password"})
+    submit = SubmitField("Register")
+
+    def validate_username(self, username):
+        existing_user_username = User.query.filter_by(username=username.data).first()
+        if existing_user_username:
+            raise ValidationError(
+                "That username already exists. PLease choose a different one."
+            )
+
+class LoginForm(FlaskForm):
+    username = StringField(validators=[InputRequired(), Length(
+        min=4, max=20)], render_kw={'placeholder': "Username"})
+    password = PasswordField(validators=[InputRequired(), Length(
+        min=4, max=20)], render_kw={"placeholder": "Password"})
+    submit = SubmitField("Login")
+
 
 # initialise rate limiter
 limiter = Limiter(
@@ -49,21 +104,58 @@ def sanitize_input(user_input):
     return sanitized_input
 
 # home route - handles GET requests and renders HTML template
-@app.route('/')
-def index():
+@app.route('/home')
+@login_required
+def home():
     return render_template('index.html')
+
+# Login page
+@app.route('/', methods=['GET', 'POST'])
+def index():
+    form = LoginForm()
+    if form.validate_on_submit():
+        user = User.query.filter_by(username=form.username.data).first()
+        if user and user.check_password(form.password.data):
+            login_user(user)
+            return redirect(url_for('home'))
+    return render_template('login.html', form=form)
+    
+
+# Register
+@app.route('/register', methods=['GET', 'POST'])
+def register():
+    form = RegistrationForm()
+    if form.validate_on_submit():
+        new_user = User(username=form.username.data)
+        new_user.set_password(form.password.data)
+        db.session.add(new_user)
+        db.session.commit()
+        return redirect(url_for('home'))
+    return render_template('register.html', form=form)
+
+
+# Logout
+@app.route('/logout', methods=['GET', 'POST'])
+@login_required
+def logout():
+    logout_user()
+    return redirect(url_for('index'))
+
 
 # about route
 @app.route('/about/purpose')
+@login_required
 def purpose():
     return render_template('purpose.html')
 
 @app.route('/about/ai-models')
+@login_required
 def ai_models():
     return render_template('ai_models.html')
 
 # logs route
 @app.route('/logs')
+@login_required
 def logs():
     history = request.cookies.get('history')
     if history:
@@ -89,6 +181,7 @@ def bert_predict(text):
 
 # check route - handles POST requests /check URL
 @app.route('/check', methods=['POST'])
+@login_required
 @limiter.limit("5 per minute") # Limit to 5 requests per minute per IP
 def check():
     user_input = request.form.get('text', '')  # Retrieve user text input
@@ -173,4 +266,6 @@ def check():
 
 # run application
 if __name__ == '__main__':
+    with app.app_context():
+        db.create_all()
     app.run(debug=True)
