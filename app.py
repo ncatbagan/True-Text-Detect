@@ -56,17 +56,15 @@ class RegistrationForm(FlaskForm):
         min=4, max=20)], render_kw={'placeholder': "Username"})
     password = PasswordField(validators=[InputRequired(), Length(
         min=4, max=20)], render_kw={"placeholder": "Password"})
-    password2 = PasswordField(validators=[InputRequired(), EqualTo('password', message='Passwords must match')], render_kw={"placeholder": "Repeat Password"})
+    password2 = PasswordField(validators=[InputRequired(), EqualTo('password', message='Passwords must match.')], render_kw={"placeholder": "Repeat Password"})
     submit = SubmitField("Register")
 
     def validate_username(self, username):
         existing_user_username = User.query.filter_by(username=username.data).first()
         if existing_user_username:
-            flash('That username already exists. Please choose a different one.', 'error')
             raise ValidationError(
                 "That username already exists. Please choose a different one."
             )
-
 class LoginForm(FlaskForm):
     username = StringField(validators=[InputRequired(), Length(
         min=4, max=20)], render_kw={'placeholder': "Username"})
@@ -141,6 +139,10 @@ def register():
         flash(form.username.data + ' Successfully Registered', 'info')
         login_user(new_user)
         return redirect(url_for('home'))
+    if form.errors:
+        for field in form:
+            for error in field.errors:
+                flash(error, 'error')
     return render_template('register.html', form=form)
 
 
