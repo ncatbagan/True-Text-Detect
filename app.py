@@ -16,7 +16,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from flask_sqlalchemy import SQLAlchemy
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, SubmitField
-from wtforms.validators import InputRequired, Length, ValidationError
+from wtforms.validators import InputRequired, Length, ValidationError, EqualTo
 # initialise logging - feel free to uncomment to view logs in console
 # logging.basicConfig(level=logging.DEBUG) 
 # logging.basicConfig(filename='app.log', level=logging.ERROR)
@@ -56,6 +56,7 @@ class RegistrationForm(FlaskForm):
         min=4, max=20)], render_kw={'placeholder': "Username"})
     password = PasswordField(validators=[InputRequired(), Length(
         min=4, max=20)], render_kw={"placeholder": "Password"})
+    password2 = PasswordField(validators=[InputRequired(), EqualTo('password')], render_kw={"placeholder": "Repeat Password"})
     submit = SubmitField("Register")
 
     def validate_username(self, username):
@@ -118,13 +119,18 @@ def index():
         user = User.query.filter_by(username=form.username.data).first()
         if user and user.check_password(form.password.data):
             login_user(user)
-            flash('Successfully Logged In', 'info')
+            flash('Successfully Logged In.', 'info')
             return redirect(url_for('home'))
+        elif not user:
+            flash('User does not exist.', 'error')
+        elif not user.check_password(form.password.data):
+            flash('Wrong Password.', 'error')
     return render_template('login.html', form=form)
     
 
 # Register
 @app.route('/register', methods=['GET', 'POST'])
+@limiter.limit("3 per minute")
 def register():
     form = RegistrationForm()
     if form.validate_on_submit():
@@ -132,6 +138,7 @@ def register():
         new_user.set_password(form.password.data)
         db.session.add(new_user)
         db.session.commit()
+        flash(form.username.data + ' Successfully Registered', 'info')
         return redirect(url_for('home'))
     return render_template('register.html', form=form)
 
