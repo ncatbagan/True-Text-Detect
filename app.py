@@ -1,5 +1,5 @@
 import logging
-from flask import Flask, request, render_template, make_response, redirect, url_for
+from flask import Flask, request, render_template, make_response, redirect, url_for, flash
 from openai import OpenAI
 import google.generativeai as genai
 from transformers import BertTokenizer, BertForSequenceClassification
@@ -61,8 +61,9 @@ class RegistrationForm(FlaskForm):
     def validate_username(self, username):
         existing_user_username = User.query.filter_by(username=username.data).first()
         if existing_user_username:
+            flash('That username already exists. Please choose a different one.', 'error')
             raise ValidationError(
-                "That username already exists. PLease choose a different one."
+                "That username already exists. Please choose a different one."
             )
 
 class LoginForm(FlaskForm):
@@ -117,6 +118,7 @@ def index():
         user = User.query.filter_by(username=form.username.data).first()
         if user and user.check_password(form.password.data):
             login_user(user)
+            flash('Successfully Logged In', 'info')
             return redirect(url_for('home'))
     return render_template('login.html', form=form)
     
@@ -139,6 +141,7 @@ def register():
 @login_required
 def logout():
     logout_user()
+    flash('You have been logged out.', 'info')
     return redirect(url_for('index'))
 
 

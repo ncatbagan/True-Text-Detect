@@ -25,6 +25,13 @@
         </div>
     </div>
     <div class="container">
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                {% for msg in messages %}
+                    <p>{{msg}}</p>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
         <h1>True Text Detect</h1>
         <p id="homeinfo">
             Analyse suspicious texts to verify it’s authenticity. Our analyser employs multiple trained models to look through each text submission and generate a score and probability based on what it has found.
