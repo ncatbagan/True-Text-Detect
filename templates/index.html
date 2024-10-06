@@ -21,7 +21,7 @@
                 </div>
             </div>
             <a href="/logs" class="nav-link">Logs</a>
-            <a href="{{url_for('logout')}}" class="btn-btn-logout">
+            <a href="{{ url_for('logout') }}" class="btn-btn-logout">
                 <img src="/static/images/logouticon.png" alt="Logout Icon" id="logout-icon">
                 Logout
             </a>
@@ -43,20 +43,22 @@
             <textarea name="text" rows="4" placeholder="Enter text to analyse..."></textarea>
             <input class="checkbtn" type="submit" value="Check Text">
         </form>
-        <!-- <div class="results">
-            {% if openai_result %}
-            <div class="result-box">OpenAI Result: {{ openai_result }}</div>
-            {% endif %}
-            {% if gemini_result %}
-            <div class="result-box">Gemini Result: {{ gemini_result }}</div>
-            {% endif %}
-            {% if bert_result %}
-            <div class="result-box">BERT Result: {{ bert_result }}</div>
-            {% endif %}
-        </div> -->
+
         {% if chart_data %}
             <img src="data:image/png;base64,{{ chart_data }}" alt="Data not found">
         {% endif %}
+
+        <div class="results">
+            {% if openai_result %}
+            <div class="result-box"><strong>OpenAI Result:</strong> {{ openai_result }}</div>
+            {% endif %}
+            {% if bert_result %}
+            <div class="result-box"><strong>BERT Result:</strong> {{ bert_result }}</div>
+            {% endif %}
+            {% if gemini_result %}
+            <div class="result-box"><strong>Gemini AI Result:</strong> {{ gemini_result }}</div>
+            {% endif %}
+        </div>
     </div>
 </body>
 </html>

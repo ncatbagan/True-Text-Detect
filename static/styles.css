@@ -306,6 +306,18 @@ textarea::placeholder {
   color: #000000;
 }
 
+.log-alert {
+  background-color: #cce5ff; /* Light blue background */
+  color: #004085; /* Dark blue text */
+  padding: 15px;
+  margin-bottom: 20px;
+  border: 1px solid #b8daff; /* Border to match the background */
+  border-radius: 5px;
+  font-weight: bold;
+  text-align: center;
+  animation: fadeIn 0.5s; /* Animation for fading in */
+}
+
 /* Responsive scaling */
 @media (max-width: 768px) {
   .nav-link {

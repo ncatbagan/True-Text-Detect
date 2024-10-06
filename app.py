@@ -18,6 +18,8 @@ from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, SubmitField
 from wtforms.validators import InputRequired, Length, ValidationError, EqualTo
 
+import matplotlib
+matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 import io
 import base64
@@ -221,7 +223,7 @@ def check():
 
     # question variables
     question = "Is the following text written by AI? :\n\n" + user_input
-    geminiQuestion = "Is the following text written by AI? Can you judge by rating either no, unlikely, uncertain, likely, yes? Can you quote what phrases appear to be AI or Human authored? Can you list reasons as to why it is AI or human authored? : \n\n" + user_input
+    geminiQuestion = "Is the following text AI-generated? Can you respond with a simple explanation, without making any headings? Include your rating (most likely, likely, uncertain, unlikely, highly unlikely), any phrases that appear AI-generated and/or human-authored, and your reasoning as to why you gave that rating: \n\n" + user_input
 
     # openai response
     try:
@@ -259,9 +261,9 @@ def check():
     # Prepare new entry
     new_entry = {
         'input': limit_to_first_five_words(user_input) + "...",
-        'openai': openai_result,
+        'openai': openai_result + "...",
+        'bert': limit_to_first_five_words(bert_result) + "...",
         'gemini': limit_to_first_five_words(gemini_result) + "...",
-        'bert': limit_to_first_five_words(bert_result),
         'timestamp': datetime.now().strftime('%Y-%m-%d %H:%M:%S')
     }
 
@@ -277,7 +279,9 @@ def check():
     if len(history) > 10:
         history = history[-10:]  # Keep only the last 10 entries
 
-    results_data = [0,0]
+    flash('A new log entry has been added.', 'info') # Log notification
+
+    results_data = [0, 0]
     responses = [openai_result, gemini_result, bert_result]
     search_results = findWholeWord('yes')
     for response in responses:
@@ -288,23 +292,28 @@ def check():
             results_data[1] += 1
 
     def pie(data):
+        plt.figure()  # Create a new figure
         plt.pie(data, labels=['Yes','No'], colors=['green', 'red'], autopct='%1.0f%%', pctdistance=0.85, explode=[0.05, 0.05])
         img_buffer = io.BytesIO()
-        plt.savefig(img_buffer,format="png",transparent=True)
+        plt.savefig(img_buffer, format="png", transparent=True)
+        plt.close()  # Close the figure to free memory
         img_buffer.seek(0)
         img_data = base64.b64encode(img_buffer.read()).decode('utf-8')
         return img_data
-    
+
     def donut(data):
+        plt.figure()  # Create a new figure
         ax = plt.subplot()
         wedges, text, autotext = ax.pie(data, colors=['green', 'red'], labels=['Yes', 'No'], autopct='%1.0f%%', pctdistance=0.85, explode=[0.05, 0.05])
-        plt.setp( wedges, width=0.35)
+        plt.setp(wedges, width=0.35)
         ax.set_aspect('equal')
         img_buffer = io.BytesIO()
-        plt.savefig(img_buffer,format="png",transparent=True)
+        plt.savefig(img_buffer, format="png", transparent=True)
+        plt.close()  # Close the figure to free memory
         img_buffer.seek(0)
         img_data = base64.b64encode(img_buffer.read()).decode('utf-8')
         return img_data
+
     # Set updated history in cookies
     resp = make_response(render_template('index.html', openai_result=openai_result, gemini_result=gemini_result, bert_result=bert_result, text=user_input, history=history, chart_data=donut(results_data)))
     resp.set_cookie('history', json.dumps(history), max_age=60*60*24)  # Cookie expires in 1 day
