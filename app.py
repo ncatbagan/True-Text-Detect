@@ -17,6 +17,11 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, SubmitField
 from wtforms.validators import InputRequired, Length, ValidationError, EqualTo
+
+import matplotlib.pyplot as plt
+import io
+import base64
+
 # initialise logging - feel free to uncomment to view logs in console
 # logging.basicConfig(level=logging.DEBUG) 
 # logging.basicConfig(filename='app.log', level=logging.ERROR)
@@ -72,6 +77,9 @@ class LoginForm(FlaskForm):
         min=4, max=20)], render_kw={"placeholder": "Password"})
     submit = SubmitField("Login")
 
+# Find certain words in the response
+def findWholeWord(w):
+        return re.compile(r'\b({0})\b'.format(w), flags=re.IGNORECASE).search
 
 # initialise rate limiter
 limiter = Limiter(
@@ -82,17 +90,17 @@ limiter = Limiter(
 )
 
 # initialise openai
-client = OpenAI(api_key="<openai api key>")
+client = OpenAI(api_key="<openai API key>")
 
 # initialise gemini ai
-genai.configure(api_key="<gemini api key>")
+genai.configure(api_key="<gemini API key>")
 gemini_model = genai.GenerativeModel("gemini-1.5-flash")
 
 # initialise BERT & configure Hugging Face API
 tokenizer = BertTokenizer.from_pretrained("pace-group-51/fine-tuned-bert")
 bert_model = BertForSequenceClassification.from_pretrained("pace-group-51/fine-tuned-bert")
 HF_API_URL = "https://api-inference.huggingface.co/models/pace-group-51/fine-tuned-bert"
-HF_HEADERS = {"Authorization": "Bearer <huggingface key>"}
+HF_HEADERS = {"Authorization": "Bearer <huggingface API key>"}
 
 @app.before_request
 def log_cookies():
@@ -185,7 +193,7 @@ def bert_predict(text):
         # print(prediction)
         if isinstance(prediction, list) and len(prediction) > 0:
             predicted_label = prediction[0][0]['label']
-            return "This text is AI-generated." if predicted_label == "LABEL_1" else "This text is written by a human."
+            return "Yes, this text is AI-generated." if predicted_label == "LABEL_1" else "No, this text is written by a human."
         else:
             return "Unexpected response format."
     else:
@@ -269,8 +277,36 @@ def check():
     if len(history) > 10:
         history = history[-10:]  # Keep only the last 10 entries
 
+    results_data = [0,0]
+    responses = [openai_result, gemini_result, bert_result]
+    search_results = findWholeWord('yes')
+    for response in responses:
+        result = search_results(response)
+        if result:
+            results_data[0] += 1
+        else:
+            results_data[1] += 1
+
+    def pie(data):
+        plt.pie(data, labels=['Yes','No'], colors=['green', 'red'], autopct='%1.0f%%', pctdistance=0.85, explode=[0.05, 0.05])
+        img_buffer = io.BytesIO()
+        plt.savefig(img_buffer,format="png",transparent=True)
+        img_buffer.seek(0)
+        img_data = base64.b64encode(img_buffer.read()).decode('utf-8')
+        return img_data
+    
+    def donut(data):
+        ax = plt.subplot()
+        wedges, text, autotext = ax.pie(data, colors=['green', 'red'], labels=['Yes', 'No'], autopct='%1.0f%%', pctdistance=0.85, explode=[0.05, 0.05])
+        plt.setp( wedges, width=0.35)
+        ax.set_aspect('equal')
+        img_buffer = io.BytesIO()
+        plt.savefig(img_buffer,format="png",transparent=True)
+        img_buffer.seek(0)
+        img_data = base64.b64encode(img_buffer.read()).decode('utf-8')
+        return img_data
     # Set updated history in cookies
-    resp = make_response(render_template('index.html', openai_result=openai_result, gemini_result=gemini_result, bert_result=bert_result, text=user_input, history=history))
+    resp = make_response(render_template('index.html', openai_result=openai_result, gemini_result=gemini_result, bert_result=bert_result, text=user_input, history=history, chart_data=donut(results_data)))
     resp.set_cookie('history', json.dumps(history), max_age=60*60*24)  # Cookie expires in 1 day
 
     logging.debug(f"Updated history: {history}")

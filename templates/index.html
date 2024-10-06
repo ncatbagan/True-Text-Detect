@@ -43,7 +43,7 @@
             <textarea name="text" rows="4" placeholder="Enter text to analyse..."></textarea>
             <input class="checkbtn" type="submit" value="Check Text">
         </form>
-        <div class="results">
+        <!-- <div class="results">
             {% if openai_result %}
             <div class="result-box">OpenAI Result: {{ openai_result }}</div>
             {% endif %}
@@ -53,7 +53,10 @@
             {% if bert_result %}
             <div class="result-box">BERT Result: {{ bert_result }}</div>
             {% endif %}
-        </div>
+        </div> -->
+        {% if chart_data %}
+            <img src="data:image/png;base64,{{ chart_data }}" alt="Data not found">
+        {% endif %}
     </div>
 </body>
 </html>
