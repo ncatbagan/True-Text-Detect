@@ -1,5 +1,5 @@
 import logging
-from flask import Flask, request, render_template, make_response, redirect, url_for, flash
+from flask import Flask, request, render_template, make_response, redirect, url_for, flash, send_file, current_app
 from openai import OpenAI
 import google.generativeai as genai
 from transformers import BertTokenizer, BertForSequenceClassification
@@ -23,6 +23,7 @@ matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 import io
 import base64
+import csv
 
 # initialise logging - feel free to uncomment to view logs in console
 # logging.basicConfig(level=logging.DEBUG) 
@@ -164,6 +165,32 @@ def logout():
     flash('You have been logged out.', 'info')
     return redirect(url_for('index'))
 
+# Route to download history as a JSON file
+@app.route('/download_history')
+@login_required
+def download_history():
+    history = request.cookies.get('history')
+
+    if not history:
+        flash('No logs found to download.', 'error')
+        return redirect(url_for('logs'))
+    
+    history_data = json.loads(history)
+    
+    file_path = 'logs.csv' # Define the file path for the CSV
+    
+    with open(file_path, mode='w', newline='') as file:
+        writer = csv.DictWriter(file, fieldnames=['input', 'openai', 'bert', 'gemini', 'timestamp'])
+        writer.writeheader()
+        for entry in history_data:
+            writer.writerow(entry)
+
+    try:
+        return send_file(file_path, as_attachment=True)
+    except Exception as e:
+        logging.error(f'Error downloading logs: {str(e)}')
+        flash('Unable to download logs.')
+        return redirect(url_for('logs'))
 
 # about route
 @app.route('/about/purpose')
@@ -293,7 +320,7 @@ def check():
 
     def pie(data):
         plt.figure()  # Create a new figure
-        plt.pie(data, labels=['Yes','No'], colors=['green', 'red'], autopct='%1.0f%%', pctdistance=0.85, explode=[0.05, 0.05])
+        plt.pie(data, labels=['AI','Human'], colors=['red', 'green'], autopct='%1.0f%%', pctdistance=0.85, explode=[0.05, 0.05])
         img_buffer = io.BytesIO()
         plt.savefig(img_buffer, format="png", transparent=True)
         plt.close()  # Close the figure to free memory
@@ -304,7 +331,7 @@ def check():
     def donut(data):
         plt.figure()  # Create a new figure
         ax = plt.subplot()
-        wedges, text, autotext = ax.pie(data, colors=['green', 'red'], labels=['Yes', 'No'], autopct='%1.0f%%', pctdistance=0.85, explode=[0.05, 0.05])
+        wedges, text, autotext = ax.pie(data, colors=['red', 'green'], labels=['AI', 'Human'], autopct='%1.0f%%', pctdistance=0.85, explode=[0.05, 0.05])
         plt.setp(wedges, width=0.35)
         ax.set_aspect('equal')
         img_buffer = io.BytesIO()
