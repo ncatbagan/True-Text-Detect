@@ -140,6 +140,9 @@ body {
   cursor: pointer;
 }
 
+.nav-link.dropdown-button {
+  border: 1px solid #991e29;
+}
 /* Hover Effect for Buttons */
 .nav-link:hover {
   background-color: #7c1621;
