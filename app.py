@@ -10,6 +10,7 @@ import json
 from flask_limiter import Limiter
 from flask_limiter.util import get_remote_address
 import re
+import math
 
 from flask_login import UserMixin, login_user, LoginManager, login_required, logout_user, current_user
 from werkzeug.security import generate_password_hash, check_password_hash
@@ -219,15 +220,28 @@ def bert_predict(text):
     response = requests.post(HF_API_URL, headers=HF_HEADERS, json={"inputs": text})
     if response.status_code == 200:
         prediction = response.json()
-        # print(prediction)
         if isinstance(prediction, list) and len(prediction) > 0:
             predicted_label = prediction[0][0]['label']
-            return "Yes, this text is AI-generated." if predicted_label == "LABEL_1" else "No, this text is written by a human."
+            if predicted_label == "LABEL_1":
+                ai_probability = round(prediction[0][0]['score'] * 100, 2)
+            else:
+                ai_probability = round(100 - round(prediction[0][0]['score'] * 100), 2)
+            result = f"Yes, this text is most likely AI-generated. (AI Probability: {ai_probability}%)" if predicted_label == "LABEL_1" else f"No, this text is most likely written by a Human. (AI Probability: {ai_probability}%)"
+            return result, ai_probability
         else:
-            return "Unexpected response format."
+            return "Unexpected response format.", None
+
     else:
         logging.error(f"Hugging Face API Error: {response.status_code} - {response.text}")
-        return "Error communicating with Hugging Face API."
+        return "Error communicating with Hugging Face API.", None
+
+gemini_probability_vals = {
+    "most likely": 95,
+    "highly unlikely": 5,
+    "unlikely": 25,
+    "likely": 75,
+    "uncertain": 50
+}
 
 # check route - handles POST requests /check URL
 @app.route('/check', methods=['POST'])
@@ -259,27 +273,46 @@ def check():
             messages=[
                 {"role": "system", "content": "You are an AI text detection tool."},
                 {"role": "user", "content": question}
-            ]
+            ],
+            temperature=0,
+            logprobs=True
         )
-        openai_result = completion.choices[0].message.content
+        predicted_label = completion.choices[0].message.content
+        if "yes" in predicted_label.lower():
+            openai_ai_probability = round(math.exp(completion.choices[0].logprobs.content[0].logprob) * 100, 2)
+        else:
+            openai_ai_probability = round(100 - round(math.exp(completion.choices[0].logprobs.content[0].logprob) * 100, 2),2)
+        openai_result = f"{predicted_label}. (AI Probability: {openai_ai_probability}%)"
     except Exception as e:  # error handling
         openai_result = f"Error: {str(e)}"
+        openai_ai_probability = None
         logging.error(f"OpenAI Error: {str(e)}")  # Log error to app.log
 
     # gemini ai response
     try:
         gemini_response = gemini_model.generate_content(geminiQuestion)
         gemini_result = gemini_response.text
+        for phrase, value in gemini_probability_vals.items():
+            if phrase in gemini_result.lower():
+                gemini_ai_probability = value
+                break
+        gemini_result += f" (AI Probability: {gemini_ai_probability}%)"
     except Exception as e:  # error handling
         gemini_result = f"Error: {str(e)}"
+        gemini_ai_probability = None
         logging.error(f"Gemini AI Error: {str(e)}")  # Log error to app.log
 
     # BERT response
     try:
-        bert_result = bert_predict(user_input)
+        bert_result, bert_ai_probability = bert_predict(user_input)
     except Exception as e:  # error handling
         bert_result = f"Error: {str(e)}"
         logging.error(f"BERT Error: {str(e)}")  # Log error to app.log
+
+    # calculate average AI probability of the models (excluding any models returning an error)
+    valid_probabilities = [p for p in [openai_ai_probability, bert_ai_probability, gemini_ai_probability] if p is not None]
+    avg_ai_probability = round(sum(valid_probabilities) / len(valid_probabilities), 2) if valid_probabilities else None
+    avg_human_probability = 100 - avg_ai_probability if valid_probabilities else None
 
     # Update the history with trimmed results
     def limit_to_first_five_words(text):
@@ -308,19 +341,9 @@ def check():
 
     flash('A new log entry has been added.', 'info') # Log notification
 
-    results_data = [0, 0]
-    responses = [openai_result, gemini_result, bert_result]
-    search_results = findWholeWord('yes')
-    for response in responses:
-        result = search_results(response)
-        if result:
-            results_data[0] += 1
-        else:
-            results_data[1] += 1
-
     def pie(data):
         plt.figure()  # Create a new figure
-        plt.pie(data, labels=['AI','Human'], colors=['red', 'green'], autopct='%1.0f%%', pctdistance=0.85, explode=[0.05, 0.05])
+        plt.pie(data, labels=['AI', 'Human'], colors=['red', 'green'], autopct='%1.0f%%', pctdistance=0.85, explode=[0.05, 0.05])
         img_buffer = io.BytesIO()
         plt.savefig(img_buffer, format="png", transparent=True)
         plt.close()  # Close the figure to free memory
@@ -342,7 +365,7 @@ def check():
         return img_data
 
     # Set updated history in cookies
-    resp = make_response(render_template('index.html', openai_result=openai_result, gemini_result=gemini_result, bert_result=bert_result, text=user_input, history=history, chart_data=donut(results_data)))
+    resp = make_response(render_template('index.html', openai_result=openai_result, gemini_result=gemini_result, bert_result=bert_result, text=user_input, history=history, chart_data=donut([avg_ai_probability, avg_human_probability])))
     resp.set_cookie('history', json.dumps(history), max_age=60*60*24)  # Cookie expires in 1 day
 
     logging.debug(f"Updated history: {history}")
