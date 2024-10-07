@@ -28,6 +28,7 @@
     </div>
     <div class="container">
         <h1>History of Checks</h1>
+        <button class="checkbtn" onclick="location.href='/download_history'">Download</button>
         <div class="history-container">
             {% with messages = get_flashed_messages() %}
                 {% if messages %}
@@ -36,7 +37,6 @@
                     {% endfor %}
                 {% endif %}
             {% endwith %}
-            <a href="/download_history">Download</a>
             {% for entry in history %}
             <div class="entry-container">
                 <strong>Input:</strong> {{ entry.input }}<br>
