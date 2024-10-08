@@ -216,6 +216,25 @@ body {
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
 }
 
+
+.openailogo {
+  float:left;
+  width: 150px;
+  padding: 50px;
+}
+
+.geminiailogo {
+  float:left;
+  width: 150px;
+  padding: 50px;
+}
+
+.hflogo {
+  float:left;
+  width: 150px;
+  padding: 50px;
+}
+
 .purposecontainer {
   width: 90%;
   max-width: 100%;
