@@ -98,7 +98,6 @@ class LoginForm(FlaskForm):
         min=4, max=20)], render_kw={"placeholder": "Password"})
     submit = SubmitField("Login")
 
-
 # initialise rate limiter
 limiter = Limiter(
     get_remote_address,
@@ -192,7 +191,6 @@ def logout():
 @login_required
 @limiter.limit("1 per minute")
 def download_history():
-    
     if not get_history():
         flash('No logs found to download.', 'error')
         return redirect(url_for('logs'))
@@ -229,25 +227,28 @@ def ai_models():
 def logs():
     return render_template('logs.html', history=get_history())
 
-# function to use BERT for text classification
-def bert_predict(text):
-    response = requests.post(HF_API_URL, headers=HF_HEADERS, json={"inputs": text})
-    if response.status_code == 200:
-        prediction = response.json()
-        if isinstance(prediction, list) and len(prediction) > 0:
-            predicted_label = prediction[0][0]['label']
-            if predicted_label == "LABEL_1":
-                ai_probability = round(prediction[0][0]['score'] * 100, 2)
+# Function to use BERT for text classification
+def bert_predict(text, retries=3, delay=1):
+    for attempt in range(retries):
+        try:
+            response = requests.post(HF_API_URL, headers=HF_HEADERS, json={"inputs": text})
+            response.raise_for_status()  # Raises an error for HTTP codes 4xx/5xx
+            prediction = response.json()
+            if isinstance(prediction, list) and len(prediction) > 0:
+                predicted_label = prediction[0][0]['label']
+                if predicted_label == "LABEL_1":
+                    ai_probability = round(prediction[0][0]['score'] * 100, 2)
+                else:
+                    ai_probability = round(100 - round(prediction[0][0]['score'] * 100), 2)
+                result = f"Yes, this text is most likely AI-generated. (AI Probability: {ai_probability}%)" if predicted_label == "LABEL_1" else f"No, this text is most likely written by a Human. (AI Probability: {ai_probability}%)"
+                return result, ai_probability
             else:
-                ai_probability = round(100 - round(prediction[0][0]['score'] * 100), 2)
-            result = f"Yes, this text is most likely AI-generated. (AI Probability: {ai_probability}%)" if predicted_label == "LABEL_1" else f"No, this text is most likely written by a Human. (AI Probability: {ai_probability}%)"
-            return result, ai_probability
-        else:
-            return "Unexpected response format.", None
-
-    else:
-        logging.error(f"Hugging Face API Error: {response.status_code} - {response.text}")
-        return "Error communicating with Hugging Face API.", None
+                return "Unexpected response format.", None
+        except requests.exceptions.RequestException as e:
+            logging.error(f"Hugging Face API Error on attempt {attempt + 1}: {str(e)}")  # Log error
+            if attempt < retries - 1:
+                time.sleep(delay)  # Wait before retrying
+    return "Error communicating with Hugging Face API after multiple attempts.", None
 
 gemini_probability_vals = {
     "most likely": 95,
@@ -276,7 +277,12 @@ def check():
     question = "Is the following text written by AI? :\n\n" + user_input
     geminiQuestion = "Is the following text AI-generated? Can you respond with a simple explanation, without making any headings? Include your rating (most likely, likely, uncertain, unlikely, highly unlikely), any phrases that appear AI-generated and/or human-authored, and your reasoning as to why you gave that rating: \n\n" + user_input
 
-    # openai response
+    # Initialise probabilities to None
+    openai_ai_probability = None
+    bert_ai_probability = None
+    gemini_ai_probability = None
+
+    # OpenAI response
     try:
         completion = client.chat.completions.create(
             model="ft:gpt-4o-mini-2024-07-18:personal:ai-text-detect:A5jhKDL0",
@@ -295,7 +301,6 @@ def check():
         openai_result = f"{predicted_label}. (AI Probability: {openai_ai_probability}%)"
     except Exception as e:  # error handling
         openai_result = f"Error: {str(e)}"
-        openai_ai_probability = None
         logging.error(f"OpenAI Error: {str(e)}")  # Log error to app.log
 
     # gemini ai response
@@ -309,7 +314,6 @@ def check():
         gemini_result += f" (AI Probability: {gemini_ai_probability}%)"
     except Exception as e:  # error handling
         gemini_result = f"Error: {str(e)}"
-        gemini_ai_probability = None
         logging.error(f"Gemini AI Error: {str(e)}")  # Log error to app.log
 
     # BERT response

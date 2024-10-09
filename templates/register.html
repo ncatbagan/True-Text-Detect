@@ -25,15 +25,15 @@
             {{ form.hidden_tag() }}
             <div class="form-group">
                 {{ form.username.label(class="form-label") }} 
-                {{ form.username(class="form-input") }}
+                {{ form.username(class="form-input", autocomplete="off") }}
             </div>
             <div class="form-group">
                 {{ form.password.label(class="form-label") }} 
-                {{ form.password(class="form-input") }}
+                {{ form.password(class="form-input", autocomplete="off") }}
             </div>
             <div class="form-group">
                 <label class="form-label" for="password2">Repeat Password</label>
-                {{ form.password2(class="form-input") }}
+                {{ form.password2(class="form-input", autocomplete="off") }}
             </div>
             <div class="form-group">
                 {{ form.submit(class="login-button") }}
