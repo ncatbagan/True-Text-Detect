@@ -1,5 +1,11 @@
 input,openai,bert,gemini,timestamp
-Octopuses are highly intelligent marine...,"Yes, this text is most likely written by AI...","Yes, this text is AI-generated....",Unlikely. The text is well-written...,2024-10-07 18:59:51
-Octopuses are highly intelligent marine...,"Yes, this text is most likely written by AI...","Yes, this text is AI-generated....",Unlikely. The text reads like...,2024-10-07 19:01:03
-Octopuses are highly intelligent marine...,"Yes, this text is most likely written by AI...","Yes, this text is AI-generated....",Unlikely. This text reads like...,2024-10-07 19:01:58
-Octopuses are highly intelligent marine...,"Yes, this text is most likely written by AI...","Yes, this text is AI-generated....",Unlikely. The text reads like...,2024-10-07 19:02:44
+Octopuses are highly intelligent marine...,"Yes, this text is most likely written by AI. (AI Probability: 100.0%)...",Error communicating with Hugging Face...,Unlikely. The text is well-written...,2024-10-08 22:30:30
+Octopuses are highly intelligent marine...,"Yes, this text is most likely written by AI. (AI Probability: 100.0%)...",Error communicating with Hugging Face...,Unlikely. The text is well-written...,2024-10-08 22:40:34
+Octopuses are highly intelligent marine...,"Yes, this text is most likely written by AI. (AI Probability: 100.0%)...",Error communicating with Hugging Face...,Unlikely. The text is well-written...,2024-10-08 22:44:53
+Octopuses are highly intelligent marine...,"Yes, this text is most likely written by AI. (AI Probability: 100.0%)...",Error communicating with Hugging Face...,Uncertain. The text is well-written...,2024-10-09 16:03:58
+The Greek Atomists reduced everything...,"Yes, this text is most likely written by AI. (AI Probability: 93.99%)...",Error communicating with Hugging Face...,Unlikely. The text is well-written...,2024-10-09 16:12:22
+The Great Barrier Reef is...,"Yes, this text is most likely written by AI. (AI Probability: 99.96%)...",Error communicating with Hugging Face...,Unlikely. The text reads like...,2024-10-09 16:12:43
+"Two grey shapes, visible from...","No, this text is most likely written by a Human. (AI Probability: 1.1%)...",Error communicating with Hugging Face...,Unlikely. While the writing style...,2024-10-09 16:12:55
+A shocking incident unfolded at...,"Yes, this text is most likely written by AI. (AI Probability: 100.0%)...",Error communicating with Hugging Face...,Uncertain. The text reads very...,2024-10-09 16:13:35
+An octopus is a sea...,"No, this text is most likely written by a Human. (AI Probability: 18.24%)...",Error communicating with Hugging Face...,Unlikely. The text is factual...,2024-10-09 16:13:47
+Octopuses are highly intelligent marine...,"Yes, this text is most likely written by AI. (AI Probability: 100.0%)...",Error communicating with Hugging Face...,Unlikely. The text is well-written...,2024-10-09 16:14:02

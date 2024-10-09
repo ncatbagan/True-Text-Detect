@@ -1,30 +1,43 @@
+# Standard Library Imports
 import logging
-from flask import Flask, request, render_template, make_response, redirect, url_for, flash, send_file, current_app
-from openai import OpenAI
-import google.generativeai as genai
-from transformers import BertTokenizer, BertForSequenceClassification
-import torch
-import requests
-from datetime import datetime
-import json
-from flask_limiter import Limiter
-from flask_limiter.util import get_remote_address
 import re
 import math
+import io
+import base64
+import csv
+import os
+from datetime import datetime
+import json
 
+# Flask and Related Imports
+from flask import Flask, request, render_template, make_response, redirect, url_for, flash, send_file, current_app
+from flask_limiter import Limiter
+from flask_limiter.util import get_remote_address
 from flask_login import UserMixin, login_user, LoginManager, login_required, logout_user, current_user
-from werkzeug.security import generate_password_hash, check_password_hash
 from flask_sqlalchemy import SQLAlchemy
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, SubmitField
 from wtforms.validators import InputRequired, Length, ValidationError, EqualTo
 
+# Security and Authentication
+from werkzeug.security import generate_password_hash, check_password_hash
+
+# OpenAI and Generative AI Imports
+from openai import OpenAI
+import google.generativeai as genai
+
+# Transformers and Machine Learning Imports
+from transformers import BertTokenizer, BertForSequenceClassification
+import torch
+import requests
+
+# Visualization Libraries
 import matplotlib
 matplotlib.use('Agg')
 import matplotlib.pyplot as plt
-import io
-import base64
-import csv
+
+# Environment Variables
+from dotenv import load_dotenv
 
 # initialise logging - feel free to uncomment to view logs in console
 # logging.basicConfig(level=logging.DEBUG) 
@@ -32,7 +45,10 @@ import csv
 
 # flask backend
 app = Flask(__name__)
-app.secret_key = "secret"
+app.secret_key = os.getenv('SECRET_KEY')
+
+# Load environment variables from .env file
+load_dotenv()
 
 # Configure SQL Alchemy
 app.config["SQLALCHEMY_DATABASE_URI"] = 'sqlite:///users.db'
@@ -74,6 +90,7 @@ class RegistrationForm(FlaskForm):
             raise ValidationError(
                 "That username already exists. Please choose a different one."
             )
+
 class LoginForm(FlaskForm):
     username = StringField(validators=[InputRequired(), Length(
         min=4, max=20)], render_kw={'placeholder': "Username"})
@@ -81,9 +98,6 @@ class LoginForm(FlaskForm):
         min=4, max=20)], render_kw={"placeholder": "Password"})
     submit = SubmitField("Login")
 
-# Find certain words in the response
-def findWholeWord(w):
-        return re.compile(r'\b({0})\b'.format(w), flags=re.IGNORECASE).search
 
 # initialise rate limiter
 limiter = Limiter(
@@ -94,17 +108,17 @@ limiter = Limiter(
 )
 
 # initialise openai
-client = OpenAI(api_key="<openai API key>")
+client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
 # initialise gemini ai
-genai.configure(api_key="<gemini API key>")
+genai.configure(api_key=os.getenv("GEMINI_API_KEY"))
 gemini_model = genai.GenerativeModel("gemini-1.5-flash")
 
 # initialise BERT & configure Hugging Face API
 tokenizer = BertTokenizer.from_pretrained("pace-group-51/fine-tuned-bert")
 bert_model = BertForSequenceClassification.from_pretrained("pace-group-51/fine-tuned-bert")
 HF_API_URL = "https://api-inference.huggingface.co/models/pace-group-51/fine-tuned-bert"
-HF_HEADERS = {"Authorization": "Bearer <huggingface API key>"}
+HF_HEADERS = {"Authorization": "Bearer {os.getenv('HUGGINGFACE_API_KEY')}"}
 
 @app.before_request
 def log_cookies():
@@ -114,6 +128,15 @@ def log_cookies():
 def sanitize_input(user_input):
     sanitized_input = re.sub(r'<.*?>', '', user_input)  # Remove any HTML tags
     return sanitized_input
+
+# Get current History from cookies
+def get_history():
+    history = request.cookies.get('history')
+    if history:
+        history = json.loads(history)
+    else:
+        history = []
+    return history
 
 # home route - handles GET requests and renders HTML template
 @app.route('/home')
@@ -169,21 +192,19 @@ def logout():
 # Route to download history as a JSON file
 @app.route('/download_history')
 @login_required
+@limiter.limit("1 per minute")
 def download_history():
-    history = request.cookies.get('history')
-
-    if not history:
+    
+    if not get_history():
         flash('No logs found to download.', 'error')
         return redirect(url_for('logs'))
-    
-    history_data = json.loads(history)
     
     file_path = 'logs.csv' # Define the file path for the CSV
     
     with open(file_path, mode='w', newline='') as file:
         writer = csv.DictWriter(file, fieldnames=['input', 'openai', 'bert', 'gemini', 'timestamp'])
         writer.writeheader()
-        for entry in history_data:
+        for entry in get_history():
             writer.writerow(entry)
 
     try:
@@ -208,12 +229,7 @@ def ai_models():
 @app.route('/logs')
 @login_required
 def logs():
-    history = request.cookies.get('history')
-    if history:
-        history = json.loads(history)
-    else:
-        history = []
-    return render_template('logs.html', history=history)
+    return render_template('logs.html', history=get_history())
 
 # function to use BERT for text classification
 def bert_predict(text):
@@ -251,13 +267,6 @@ def check():
     user_input = request.form.get('text', '')  # Retrieve user text input
     user_input = sanitize_input(user_input)    # Sanitize user input
     logging.debug(f"Sanitized User input: {user_input}") # logging
-
-    # Get current history from cookies
-    history = request.cookies.get('history')
-    if history:
-        history = json.loads(history)
-    else:
-        history = []
 
     if not user_input:  # if there's no input, render the existing history
         return render_template('index.html', openai_result="No text provided.", gemini_result="No text provided.", bert_result="No text provided.", text=user_input, history=history)
@@ -327,12 +336,8 @@ def check():
         'timestamp': datetime.now().strftime('%Y-%m-%d %H:%M:%S')
     }
 
-    # Get current history from cookies
-    history = request.cookies.get('history')
-    if history:
-        history = json.loads(history)
-    else:
-        history = []
+    # Get current history from cookie
+    history = get_history()
 
     # Append new entry and limit to the last 10 entries
     history.append(new_entry)
@@ -340,16 +345,6 @@ def check():
         history = history[-10:]  # Keep only the last 10 entries
 
     flash('A new log entry has been added.', 'info') # Log notification
-
-    def pie(data):
-        plt.figure()  # Create a new figure
-        plt.pie(data, labels=['AI', 'Human'], colors=['red', 'green'], autopct='%1.0f%%', pctdistance=0.85, explode=[0.05, 0.05])
-        img_buffer = io.BytesIO()
-        plt.savefig(img_buffer, format="png", transparent=True)
-        plt.close()  # Close the figure to free memory
-        img_buffer.seek(0)
-        img_data = base64.b64encode(img_buffer.read()).decode('utf-8')
-        return img_data
 
     def donut(data):
         plt.figure()  # Create a new figure
