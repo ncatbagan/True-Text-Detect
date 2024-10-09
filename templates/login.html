@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AI Text Detect</title>
     <link rel="stylesheet" href="/static/styles.css">
-    <script src="script.js" defer></script>
 </head>
 <body>
     <div class="navbar">
@@ -26,11 +25,11 @@
             {{ form.hidden_tag() }}
             <div class="form-group">
                 {{ form.username.label(class="form-label") }}
-                {{ form.username(class="form-input") }}
+                {{ form.username(class="form-input", autocomplete="off") }}
             </div>
             <div class="form-group">
                 {{ form.password.label(class="form-label") }}
-                {{ form.password(class="form-input") }}
+                {{ form.password(class="form-input",autocomplete="off") }}
             </div>
             <div id="login-button" class="form-group">
                 {{ form.submit(class="login-button") }}

@@ -40,7 +40,7 @@ import matplotlib.pyplot as plt
 from dotenv import load_dotenv
 
 # initialise logging - feel free to uncomment to view logs in console
-# logging.basicConfig(level=logging.DEBUG) 
+# logging.basicConfig(level=logging.DEBUG)
 # logging.basicConfig(filename='app.log', level=logging.ERROR)
 
 # flask backend
@@ -118,7 +118,7 @@ gemini_model = genai.GenerativeModel("gemini-1.5-flash")
 tokenizer = BertTokenizer.from_pretrained("pace-group-51/fine-tuned-bert")
 bert_model = BertForSequenceClassification.from_pretrained("pace-group-51/fine-tuned-bert")
 HF_API_URL = "https://api-inference.huggingface.co/models/pace-group-51/fine-tuned-bert"
-HF_HEADERS = {"Authorization": "Bearer {os.getenv('HUGGINGFACE_API_KEY')}"}
+HF_HEADERS = {"Authorization": f"Bearer {os.getenv('HUGGINGFACE_API_KEY')}"}
 
 @app.before_request
 def log_cookies():
@@ -159,7 +159,6 @@ def index():
         elif not user.check_password(form.password.data):
             flash('Wrong Password.', 'error')
     return render_template('login.html', form=form)
-    
 
 # Register
 @app.route('/register', methods=['GET', 'POST'])
@@ -179,7 +178,6 @@ def register():
             for error in field.errors:
                 flash(error, 'error')
     return render_template('register.html', form=form)
-
 
 # Logout
 @app.route('/logout', methods=['GET', 'POST'])
@@ -265,8 +263,11 @@ gemini_probability_vals = {
 @limiter.limit("5 per minute") # Limit to 5 requests per minute per IP
 def check():
     user_input = request.form.get('text', '')  # Retrieve user text input
-    user_input = sanitize_input(user_input)    # Sanitize user input
-    logging.debug(f"Sanitized User input: {user_input}") # logging
+    user_input = sanitize_input(user_input)  # Sanitize user input
+    logging.debug(f"Sanitized User input: {user_input}")  # logging
+
+    # Initialize history here
+    history = get_history()
 
     if not user_input:  # if there's no input, render the existing history
         return render_template('index.html', openai_result="No text provided.", gemini_result="No text provided.", bert_result="No text provided.", text=user_input, history=history)
@@ -335,9 +336,6 @@ def check():
         'gemini': limit_to_first_five_words(gemini_result) + "...",
         'timestamp': datetime.now().strftime('%Y-%m-%d %H:%M:%S')
     }
-
-    # Get current history from cookie
-    history = get_history()
 
     # Append new entry and limit to the last 10 entries
     history.append(new_entry)
