@@ -8,6 +8,7 @@ import csv
 import os
 from datetime import datetime
 import json
+import time
 
 # Flask and Related Imports
 from flask import Flask, request, render_template, make_response, redirect, url_for, flash, send_file, current_app
@@ -28,7 +29,6 @@ import google.generativeai as genai
 
 # Transformers and Machine Learning Imports
 from transformers import BertTokenizer, BertForSequenceClassification
-import torch
 import requests
 
 # Visualization Libraries
@@ -275,7 +275,7 @@ def check():
 
     # question variables
     question = "Is the following text written by AI? :\n\n" + user_input
-    geminiQuestion = "Is the following text AI-generated? Can you respond with a simple explanation, without making any headings? Include your rating (most likely, likely, uncertain, unlikely, highly unlikely), any phrases that appear AI-generated and/or human-authored, and your reasoning as to why you gave that rating: \n\n" + user_input
+    geminiQuestion = "Is the following text AI-generated? Can you respond with a simple explanation, without making any headings or using **? Include your rating (most likely, likely, uncertain, unlikely, highly unlikely), any phrases that appear AI-generated and/or human-authored, and your reasoning as to why you gave that rating: \n\n" + user_input
 
     # Initialise probabilities to None
     openai_ai_probability = None
