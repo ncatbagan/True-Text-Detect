@@ -93,7 +93,7 @@ For more details, please see the [LICENSE](LICENSE) file or visit the [Creative 
 
 </ul>
 
-<h2>Collaborators</h2>
+<h2>Contributors</h2>
 
 **Zarif Ahmed Anik** - (https://github.com/Anik9076)<br>
 **Norreigne Catbagan** - (https://github.com/ncatbagan)<br>
