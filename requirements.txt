@@ -1,0 +1,13 @@
+Flask==2.3.3
+Flask-Limiter==2.5.0
+Flask-Login==0.6.0
+Flask-SQLAlchemy==3.0.2
+Flask-WTF==1.0.1
+python-dotenv==1.0.0
+Werkzeug==2.3.3
+requests==2.31.0
+transformers==4.34.0
+matplotlib==3.7.1
+openai==0.27.0
+google-generativeai==0.8.1
+WTForms==3.0.1
