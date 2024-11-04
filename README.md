@@ -69,7 +69,7 @@ You are free to:
 <ul>
 <li> Attribution: You must give appropriate credit, provide a link to the license, and indicate if changes were made. You may do so in any reasonable manner, but not in any way that suggests the licensor endorses you or your use. </li>
 </ul>
-For more details, please see the [LICENSE](LICENSE) file or visit the [Creative Commons website](https://creativecommons.org/licenses/by/4.0/).
+<p>For more details, please see the <a href="LICENSE">LICENSE</a> file or visit the [Creative Commons website](https://creativecommons.org/licenses/by/4.0/).</p>
 
 
 <h2>Acknowledgements</h2>
