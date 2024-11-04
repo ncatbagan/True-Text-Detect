@@ -39,24 +39,12 @@
     GEMINI_API_KEY=your_gemini_api_key
     HUGGINGFACE_API_KEY=your_huggingface_api_key
     ```
-
-5. **Initialize the database:**
-    ```bash
-    flask shell
-    >>> from your_application import db
-    >>> db.create_all()
-    ```
 </p>
 
 <h2>Usage</h2>
 <p>
   
 1. **Run the application**
-    ```bash
-    flask shell
-    >>> from your_application import db
-    >>> db.create_all()
-    ```
 
 2. **Access the application:** Open your web browser and navigate to http://127.0.0.1:5000.
 
@@ -72,14 +60,15 @@
 This project is licensed under the Creative Commons Attribution 4.0 International License (CC BY 4.0). 
 
 You are free to:
-
-- Share — copy and redistribute the material in any medium or format
-- Adapt — remix, transform, and build upon the material
+<ul>
+<li>Share — copy and redistribute the material in any medium or format </li>
+<li>Adapt — remix, transform, and build upon the material </li>
+</ul>
 
 **Under the following terms:**
-
-- **Attribution**: You must give appropriate credit, provide a link to the license, and indicate if changes were made. You may do so in any reasonable manner, but not in any way that suggests the licensor endorses you or your use.
-
+<ul>
+<li> Attribution: You must give appropriate credit, provide a link to the license, and indicate if changes were made. You may do so in any reasonable manner, but not in any way that suggests the licensor endorses you or your use. </li>
+</ul>
 For more details, please see the [LICENSE](LICENSE) file or visit the [Creative Commons website](https://creativecommons.org/licenses/by/4.0/).
 
 
