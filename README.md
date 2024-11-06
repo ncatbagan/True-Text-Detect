@@ -17,7 +17,7 @@
 
 1. **Clone the repository:**
     ```bash
-   git clone https://github.com/ncatbagan/PACE-Group51
+   git clone https://github.com/ncatbagan/True-Text-Detect
    ```
 
 2. **Create a virtual environment:**
