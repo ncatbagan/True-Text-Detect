@@ -43,15 +43,19 @@
 <h2>Usage</h2>
 <p>
   
-1. **Run the application**
+1. **Run the application:** This demo is using VSCode to run our code.
+<br> ![Demo1](https://github.com/user-attachments/assets/5e9a3205-a0ca-4ce5-a88d-c90b57cbc3af)
 
 2. **Access the application:** Open your web browser and navigate to http://127.0.0.1:5000.
 
 3. **Register and log in:** Follow the prompts to create a new account and log in.
+<br> ![Demo2](https://github.com/user-attachments/assets/0e862cf4-0d40-47bd-9d6d-dc05156f2d21)
 
 4. **Check text:** Use the input form to submit text for analysis. The application will provide feedback on whether the text is likely AI-generated.
+<br> ![Demo3](https://github.com/user-attachments/assets/8f273810-3474-4013-8bc1-1fdf008d4058)
 
 5. **Download history:** You can download your previous analyses as a CSV file for record-keeping.
+<br> ![Demo4](https://github.com/user-attachments/assets/37e9f625-6428-45d4-a599-5fafe398829c)
 </p>
 
 <h2>License</h2>
