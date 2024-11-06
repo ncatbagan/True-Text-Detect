@@ -6,7 +6,7 @@
 <ul>
   <li>User authentication with registration and login functionality. </li> 
   <li>Integration with OpenAI and Gemini AI for text analysis. </li>  
-  <li>Utilization of a BERT model for text classification. </li> 
+  <li>Utilisation of a BERT model for text classification. </li> 
   <li>Rate limiting to prevent abuse of the service. </li> 
   <li>History tracking of user inputs with the ability to download logs. </li>  
   <li>Visual representation of AI vs. Human probability through pie charts. </li> 
@@ -17,8 +17,7 @@
 
 1. **Clone the repository:**
     ```bash
-   git clone https://github.com/yourusername/your-repo.git
-   cd your-repo
+   git clone https://github.com/ncatbagan/PACE-Group51
    ```
 
 2. **Create a virtual environment:**
@@ -69,7 +68,7 @@ You are free to:
 <ul>
 <li> Attribution: You must give appropriate credit, provide a link to the license, and indicate if changes were made. You may do so in any reasonable manner, but not in any way that suggests the licensor endorses you or your use. </li>
 </ul>
-<p>For more details, please see the <a href="LICENSE">LICENSE</a> file or visit the [Creative Commons website](https://creativecommons.org/licenses/by/4.0/).</p>
+<p>For more details, please see the <a href="LICENSE">LICENSE</a> file or visit the <a href="https://creativecommons.org/licenses/by/4.0/">Creative Commons Website</a>.</p>
 
 
 <h2>Acknowledgements</h2>
@@ -78,7 +77,7 @@ You are free to:
   <li><a href="https://flask.palletsprojects.com/" target="_blank">Flask</a> for the web framework.</li>
   <li><a href="https://openai.com/" target="_blank">OpenAI</a> and <a href="https://google.com/generativeai" target="_blank">Gemini AI</a> for the AI models.</li>
   <li><a href="https://huggingface.co/transformers/" target="_blank">Hugging Face Transformers</a> for BERT.</li>
-  <li><a href="https://matplotlib.org/" target="_blank">Matplotlib</a> for visualization.</li>
+  <li><a href="https://matplotlib.org/" target="_blank">Matplotlib</a> for visualisation.</li>
 
 </ul>
 
